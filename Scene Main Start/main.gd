@@ -26,7 +26,7 @@ func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(self._server_version_request)
 	
-	var error = http_request.request("https://raw.githubusercontent.com/RockMeetsHill/TrollGamePatchRepo/refs/heads/main/serverVersion.json")
+	var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/serverVersion.json")
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")	
 
@@ -108,7 +108,7 @@ func _server_version_request(result, response_code, headers, body):
 		add_child(http_request)
 		http_request.request_completed.connect(self._file_version_request)
 		
-		var error = http_request.request("https://raw.githubusercontent.com/RockMeetsHill/TrollGamePatchRepo/main/AllLevel.zip")
+		var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/AllLevel.zip")
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")	
 	else:
