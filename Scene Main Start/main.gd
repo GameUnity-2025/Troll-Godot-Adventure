@@ -98,6 +98,7 @@ func _server_version_request(result, response_code, headers, body):
 	print("Content from remote file:")
 	print(response)
 	serverVersion = response
+	
 	#Check version
 	if(serverVersion > currentVersion):
 		print("new update is available...")
@@ -148,6 +149,27 @@ func _file_version_request(result, response_code, headers, body):
 		print("Error saving file.")
 	if ProjectSettings.load_resource_pack("res://game_content/AllLevel.zip"):
 		print("load new resource pack...")
+		
+		#load local version and modify
+		#optimize later so doesnt have to open twice 
+		var dataFromFile = FileAccess.open(versionFile, FileAccess.READ)
+		var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
+		versionFromfile["version"] = serverVersion
+		
+		#debug 
+		var version = versionFromfile["version"]
+		print("updated version")
+		print(version)
+		#debug
+		
+		var writeFile = FileAccess.open(versionFile, FileAccess.WRITE)
+		var stringified = JSON.stringify(versionFromfile,"\t")
+		writeFile.store_string(stringified)
+		writeFile.close()
+		
+		
+		currentVersion = version
+		$Version.text = "Version: "+ str(currentVersion)
 		$UpdateCheck.text = "Up to Date !"
 	else:
 		print("something went wrong, cannot load resource pack")
