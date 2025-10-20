@@ -100,10 +100,10 @@ func _server_version_request(result, response_code, headers, body):
 	serverVersion = response
 	
 	#Check version
+	
 	if(serverVersion > currentVersion):
 		print("new update is available...")
 		$UpdateCheck.text = "updating to... "+ str(serverVersion)
-		
 		#Download new server game content file
 		var http_request = HTTPRequest.new()
 		add_child(http_request)

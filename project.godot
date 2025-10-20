@@ -13,7 +13,10 @@ config_version=5
 config/name="Project-1"
 run/main_scene="uid://dxmmwaa2m58ff"
 config/features=PackedStringArray("4.4", "Mobile")
+boot_splash/bg_color=Color(1, 1, 1, 1)
+boot_splash/image="uid://ci5fu44joi7mm"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=1000
 
 [autoload]
 
