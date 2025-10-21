@@ -102,6 +102,7 @@ func _server_version_request(result, response_code, headers, body):
 	#Check version
 	
 	if(serverVersion > currentVersion):
+		$Loading.visible = true
 		print("new update is available...")
 		$UpdateCheck.text = "updating to... "+ str(serverVersion)
 		#Download new server game content file
@@ -135,7 +136,10 @@ func _load_level_resources():
 		print("no game content file found")
 
 func _file_version_request(result, response_code, headers, body):
+	
 	print("downloading files...")
+	
+	
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("patch could not be downloaded")
 	print(HTTPRequest.RESULT_SUCCESS)
@@ -171,5 +175,6 @@ func _file_version_request(result, response_code, headers, body):
 		currentVersion = version
 		$Version.text = "Version: "+ str(currentVersion)
 		$UpdateCheck.text = "Up to Date !"
+		$Loading.visible = false
 	else:
 		print("something went wrong, cannot load resource pack")

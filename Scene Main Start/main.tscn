@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxmmwaa2m58ff"]
+[gd_scene load_steps=7 format=3 uid="uid://dxmmwaa2m58ff"]
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
 [ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m8jwf"]
@@ -19,10 +20,9 @@ script = ExtResource("1_1bvp3")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -1.0
-offset_top = -5.0
-offset_right = 1748.0
-offset_bottom = 1150.0
+offset_top = 1.0
+offset_right = 1693.0
+offset_bottom = 1133.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.750674, 0.638158)
@@ -46,17 +46,21 @@ scale = Vector2(0.2, 0.2)
 texture_normal = SubResource("CompressedTexture2D_lx6ph")
 
 [node name="Version" type="Label" parent="."]
+texture_filter = 5
 offset_left = 25.0
 offset_top = 695.0
-offset_right = 194.0
+offset_right = 195.0
 offset_bottom = 720.0
 text = "Version: "
 
 [node name="UpdateCheck" type="Label" parent="."]
-offset_left = 137.0
-offset_top = 696.0
-offset_right = 269.0
-offset_bottom = 719.0
+offset_left = 122.0
+offset_top = 695.0
+offset_right = 292.0
+offset_bottom = 720.0
+
+[node name="Loading" parent="." instance=ExtResource("2_5jojc")]
+visible = false
 
 [connection signal="pressed" from="Start-BT" to="." method="_on_start_bt_pressed"]
 [connection signal="pressed" from="LevelSelectBt" to="." method="_on_level_select_bt_pressed"]
