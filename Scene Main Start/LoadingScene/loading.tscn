@@ -1,39 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://c4pyc1r527cgp"]
+[gd_scene load_steps=4 format=3 uid="uid://c4pyc1r527cgp"]
 
 [ext_resource type="Texture2D" uid="uid://bbgwpoiadoloa" path="res://Pixel Adventure 1/Free/Background/background.png" id="1_evfxr"]
-[ext_resource type="Texture2D" uid="uid://bn6lvm56ynq2m" path="res://Pixel Adventure 1/Free/Items/Boxes/Box2/Idle.png" id="2_oxg48"]
+[ext_resource type="Texture2D" uid="uid://3hggc4dvjcgv" path="res://UI/Banner/13.png" id="2_oxg48"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eg6mg"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(64.8177, 224.801, 62.2888, 30.4464)
 
 [node name="Loading" type="Node2D"]
 
 [node name="TextureRect" type="TextureRect" parent="."]
 texture_filter = 1
 texture_repeat = 2
-offset_left = 3.0
-offset_top = 1.0
-offset_right = 1273.0
-offset_bottom = 721.0
+offset_right = 1270.0
+offset_bottom = 720.0
 texture = ExtResource("1_evfxr")
 expand_mode = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(350, 350)
-scale = Vector2(2.839, 3)
-texture = ExtResource("2_oxg48")
-
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-texture_filter = 1
-position = Vector2(793, 350)
-scale = Vector2(2.839, 3)
-texture = ExtResource("2_oxg48")
+position = Vector2(612.5, 651.125)
+scale = Vector2(12.5323, 4.075)
+texture = SubResource("AtlasTexture_eg6mg")
 
 [node name="Label" type="Label" parent="."]
 texture_filter = 1
-offset_left = 408.0
-offset_top = 331.0
-offset_right = 744.0
-offset_bottom = 372.0
-theme_override_font_sizes/font_size = 25
+offset_left = 400.0
+offset_top = 636.0
+offset_right = 839.0
+offset_bottom = 691.0
+theme_override_font_sizes/font_size = 40
 text = "Downloading Update..."
-
-[node name="Sprite2D3" type="Sprite2D" parent="."]

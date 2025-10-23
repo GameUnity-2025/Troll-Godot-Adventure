@@ -2,10 +2,8 @@
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
+[ext_resource type="Texture2D" uid="uid://bbgwpoiadoloa" path="res://Pixel Adventure 1/Free/Background/background.png" id="4_lx6ph"]
 [ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m8jwf"]
-load_path = "res://.godot/imported/background.png-20388f841c5066d74062734e25e0b3ac.ctex"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5jojc"]
 load_path = "res://.godot/imported/Start.png-c208608f7230fa004e488ed54ccce727.ctex"
@@ -16,19 +14,13 @@ load_path = "res://.godot/imported/Quit.png-3c4219bab98c844c708a41935daeac51.cte
 [node name="main" type="Node2D"]
 script = ExtResource("1_1bvp3")
 
-[node name="Background" type="TextureRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = 1693.0
-offset_bottom = 1133.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.750674, 0.638158)
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = SubResource("CompressedTexture2D_m8jwf")
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_direction = 1
+offset_right = 1270.0
+offset_bottom = 720.0
+size_flags_stretch_ratio = 0.0
+texture = ExtResource("4_lx6ph")
+expand_mode = 1
 
 [node name="Start-BT" type="TouchScreenButton" parent="."]
 position = Vector2(487, 61)
@@ -44,20 +36,6 @@ texture_normal = ExtResource("5_lquwl")
 position = Vector2(494, 387)
 scale = Vector2(0.2, 0.2)
 texture_normal = SubResource("CompressedTexture2D_lx6ph")
-
-[node name="Version" type="Label" parent="."]
-texture_filter = 5
-offset_left = 25.0
-offset_top = 695.0
-offset_right = 195.0
-offset_bottom = 720.0
-text = "Version: "
-
-[node name="UpdateCheck" type="Label" parent="."]
-offset_left = 122.0
-offset_top = 695.0
-offset_right = 292.0
-offset_bottom = 720.0
 
 [node name="Loading" parent="." instance=ExtResource("2_5jojc")]
 visible = false

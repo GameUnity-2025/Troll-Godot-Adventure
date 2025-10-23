@@ -4,7 +4,7 @@ var tween: Tween
 var versionFile = "res://version.json"
 var currentVersion
 var serverVersion
-var game_content_path = "res://game_content/AllLevel.zip"
+var game_content_path = "res://game_content/AllLevel.pck"
 
 func _ready():
 	# Connect TouchScreenButton signals
@@ -20,7 +20,7 @@ func _ready():
 	
 	_load_level_resources()
 	
-	$Version.text = "Version: "+ str(currentVersion)
+	
 	#creating new HTTPRequest 
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
@@ -63,8 +63,8 @@ func _on_level_select_bt_down():
 func _on_level_select_bt_up():
 	animate_button_up($"LevelSelectBt")
 	AudioController.play_click()
-	get_tree().change_scene_to_file.call_deferred("res://UI/level_select_menu.tscn")
-
+	get_tree().change_scene_to_file("res://UI/level_select_menu.tscn")
+	#get_tree().change_scene_to_file.call_deferred("res://UI/level_select_menu.tscn")
 # Quit Button
 func _on_quit_bt_down():
 	animate_button_down($"Quit-BT")
@@ -104,18 +104,17 @@ func _server_version_request(result, response_code, headers, body):
 	if(serverVersion > currentVersion):
 		$Loading.visible = true
 		print("new update is available...")
-		$UpdateCheck.text = "updating to... "+ str(serverVersion)
+		
 		#Download new server game content file
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
 		http_request.request_completed.connect(self._file_version_request)
 		
-		var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/AllLevel.zip")
+		var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/AllLevel.pck")
 		if error != OK:
 			push_error("An error occurred in the HTTP request.")	
 	else:
 		print("version up to date...")
-		$UpdateCheck.text = "your version is up to date"
 	
 
 #Getting JSON version file local
@@ -144,14 +143,14 @@ func _file_version_request(result, response_code, headers, body):
 		push_error("patch could not be downloaded")
 	print(HTTPRequest.RESULT_SUCCESS)
 	
-	var file = FileAccess.open("res://game_content/AllLevel.zip", FileAccess.WRITE)
+	var file = FileAccess.open("res://game_content/AllLevel.pck", FileAccess.WRITE)
 	if file:
 		file.store_buffer(body)
 		file.close()
 		print("saving new file to game_content...")
 	else:
 		print("Error saving file.")
-	if ProjectSettings.load_resource_pack("res://game_content/AllLevel.zip"):
+	if ProjectSettings.load_resource_pack("res://game_content/AllLevel.pck"):
 		print("load new resource pack...")
 		
 		#load local version and modify
@@ -173,8 +172,7 @@ func _file_version_request(result, response_code, headers, body):
 		
 		
 		currentVersion = version
-		$Version.text = "Version: "+ str(currentVersion)
-		$UpdateCheck.text = "Up to Date !"
+		
 		$Loading.visible = false
 	else:
 		print("something went wrong, cannot load resource pack")

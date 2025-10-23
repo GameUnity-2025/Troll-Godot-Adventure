@@ -68,7 +68,8 @@ func go_to_level(level_number: int):
 	
 	# Kiểm tra file có tồn tại không
 	if ResourceLoader.exists(level_path):
-		get_tree().change_scene_to_file.call_deferred(level_path)
+		get_tree().change_scene_to_file(level_path)
+		#get_tree().change_scene_to_file.call_deferred(level_path)
 		print("Loading level: ", level_path)
 		# Show level title after a short delay
 		call_deferred("show_simple_level_title")
@@ -88,7 +89,8 @@ func try_alternative_paths(level_number: int):
 	
 	for path in alternative_paths:
 		if ResourceLoader.exists(path):
-			get_tree().change_scene_to_file.call_deferred(path)
+			get_tree().change_scene_to_file(path)
+			#get_tree().change_scene_to_file.call_deferred(path)
 			print("Found alternative path: ", path)
 			return
 	
@@ -103,7 +105,8 @@ func go_to_win_scene():
 	var win_scene_path = "res://WinScene.tscn"
 	
 	if ResourceLoader.exists(win_scene_path):
-		get_tree().change_scene_to_file.call_deferred(win_scene_path)
+		get_tree().change_scene_to_file(win_scene_path)
+		#get_tree().change_scene_to_file.call_deferred(win_scene_path)
 		print("✅ Loaded WinScene successfully!")
 	else:
 		# Thử các đường dẫn khác
@@ -116,7 +119,8 @@ func go_to_win_scene():
 		
 		for path in alternative_win_paths:
 			if ResourceLoader.exists(path):
-				get_tree().change_scene_to_file.call_deferred(path)
+				get_tree().change_scene_to_file(path)
+				#get_tree().change_scene_to_file.call_deferred(path)
 				print("✅ Found WinScene at: ", path)
 				return
 		
