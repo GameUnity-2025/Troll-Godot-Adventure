@@ -63,8 +63,8 @@ func _on_level_select_bt_down():
 func _on_level_select_bt_up():
 	animate_button_up($"LevelSelectBt")
 	AudioController.play_click()
-	get_tree().change_scene_to_file("res://UI/level_select_menu.tscn")
-	#get_tree().change_scene_to_file.call_deferred("res://UI/level_select_menu.tscn")
+	#get_tree().change_scene_to_file("res://UI/level_select_menu.tscn")
+	get_tree().change_scene_to_file.call_deferred("res://UI/level_select_menu.tscn")
 # Quit Button
 func _on_quit_bt_down():
 	animate_button_down($"Quit-BT")
