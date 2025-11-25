@@ -14,14 +14,17 @@ config/name="Project-1"
 run/main_scene="uid://dxmmwaa2m58ff"
 config/features=PackedStringArray("4.4", "Mobile")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="uid://ci5fu44joi7mm"
+boot_splash/image="uid://bu6p43414g3gy"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=3000
 
 [autoload]
 
 AudioController="*res://audio/audio_controller.tscn"
 GameManager="*res://CommonScripts/GameManager.gd"
 DeathCounterUI="*res://UI/DeathCounterUI.tscn"
+DeathLimitManager="*res://CommonScripts/DeathLimitManager.gd"
+Death5PopupManager="*res://CommonScripts/Death5PopupManager.gd"
 
 [display]
 
@@ -34,6 +37,10 @@ window/stretch/mode="canvas_items"
 [dotnet]
 
 project/assembly_name="Project-1"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/admob/plugin.cfg")
 
 [global_group]
 

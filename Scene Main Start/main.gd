@@ -5,6 +5,8 @@ var versionFile = "res://version.json"
 var currentVersion
 var serverVersion
 var game_content_path = "res://game_content/AllLevel.pck"
+var inter = preload("res://CommonScripts/ads/Interstatial.gd")
+var ad = inter.new()
 
 func _ready():
 	# Connect TouchScreenButton signals
@@ -15,6 +17,9 @@ func _ready():
 	$"Quit-BT".pressed.connect(_on_quit_bt_down)
 	$"Quit-BT".released.connect(_on_quit_bt_up)
 	print("running patch downloader...")
+	
+	ad._on_load_pressed()
+	print("ad loaded")
 	
 	_load_version_file(versionFile)
 	
@@ -85,15 +90,15 @@ func _on_level_select_bt_pressed() -> void:
 	pass
 
 #HTTPRequest for server version completion
-func _server_version_request(result, response_code, headers, body):
+func _server_version_request(result, _response_code, _headers, body):
 	print("downloading...")
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("patch could not be downloaded")
 	print(HTTPRequest.RESULT_SUCCESS)
 	
 	#var content = body.get_string_from_utf8()
-	var json = JSON.new()
-	var content = json.parse_string(body.get_string_from_utf8())
+	#var json = JSON.new()
+	var content = JSON.parse_string(body.get_string_from_utf8())
 	var response = content["version"]
 	print("Content from remote file:")
 	print(response)
@@ -118,7 +123,7 @@ func _server_version_request(result, response_code, headers, body):
 	
 
 #Getting JSON version file local
-func _load_version_file(versionFile: String):
+func _load_version_file(fileVersion: String):
 	if FileAccess.file_exists(versionFile):
 		var dataFromFile = FileAccess.open(versionFile, FileAccess.READ)
 		var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
@@ -134,7 +139,7 @@ func _load_level_resources():
 	else: 
 		print("no game content file found")
 
-func _file_version_request(result, response_code, headers, body):
+func _file_version_request(result, _response_code, _headers, body):
 	
 	print("downloading files...")
 	
@@ -176,3 +181,7 @@ func _file_version_request(result, response_code, headers, body):
 		$Loading.visible = false
 	else:
 		print("something went wrong, cannot load resource pack")
+
+func _on_show_ins_ad_pressed() -> void:
+	ad._on_show_pressed()
+	print("showing ad")

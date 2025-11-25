@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ci5fu44joi7mm"
-path="res://.godot/imported/z7130770064995_3fd736e3c06236b6d32d373a754f4692.png-5c3daf75ed8cb720d6179d7e688bc711.ctex"
+uid="uid://bby3cd1lppkf8"
+path="res://.godot/imported/format-interstitial.svg-068610673c8c89ff9e1c9b26ba7eac17.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://UI/splashIMG/z7130770064995_3fd736e3c06236b6d32d373a754f4692.png"
-dest_files=["res://.godot/imported/z7130770064995_3fd736e3c06236b6d32d373a754f4692.png-5c3daf75ed8cb720d6179d7e688bc711.ctex"]
+source_file="res://addons/admob/assets/format-interstitial.svg"
+dest_files=["res://.godot/imported/format-interstitial.svg-068610673c8c89ff9e1c9b26ba7eac17.ctex"]
 
 [params]
 
@@ -32,3 +32,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

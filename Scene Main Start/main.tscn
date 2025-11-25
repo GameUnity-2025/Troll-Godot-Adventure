@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dxmmwaa2m58ff"]
+[gd_scene load_steps=8 format=3 uid="uid://dxmmwaa2m58ff"]
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
 [ext_resource type="Texture2D" uid="uid://bbgwpoiadoloa" path="res://Pixel Adventure 1/Free/Background/background.png" id="4_lx6ph"]
 [ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://b1dxugyb7ux15" path="res://Hello.png" id="5_qhk7q"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5jojc"]
 load_path = "res://.godot/imported/Start.png-c208608f7230fa004e488ed54ccce727.ctex"
@@ -40,6 +41,12 @@ texture_normal = SubResource("CompressedTexture2D_lx6ph")
 [node name="Loading" parent="." instance=ExtResource("2_5jojc")]
 visible = false
 
+[node name="showInsAd" type="TouchScreenButton" parent="."]
+position = Vector2(30, 248)
+scale = Vector2(0.266325, 0.295876)
+texture_normal = ExtResource("5_qhk7q")
+
 [connection signal="pressed" from="Start-BT" to="." method="_on_start_bt_pressed"]
 [connection signal="pressed" from="LevelSelectBt" to="." method="_on_level_select_bt_pressed"]
 [connection signal="pressed" from="Quit-BT" to="." method="_on_quit_bt_pressed"]
+[connection signal="pressed" from="showInsAd" to="." method="_on_show_ins_ad_pressed"]

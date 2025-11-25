@@ -12,7 +12,33 @@ signal level_unlocked(level_number: int)
 signal death_count_changed(new_count: int)
 
 func _ready():
+	# ✅ Connect signals với AutoLoad DeathLimitManager
+	DeathLimitManager.death_limit_reached.connect(_on_death_limit_reached)
+	DeathLimitManager.death_count_updated.connect(_on_daily_death_updated)
+	
 	load_progress()
+	# Auto-load DeathMessageSystem using process method
+	set_process(true)
+
+var last_scene_path: String = ""
+
+func _process(_delta):
+	# Check for scene changes
+	var current_scene = get_tree().current_scene
+	if current_scene and current_scene.scene_file_path != last_scene_path:
+		last_scene_path = current_scene.scene_file_path
+		_on_scene_changed()
+
+func _on_scene_changed():
+	# Wait for scene to be fully ready
+	await get_tree().process_frame
+	await get_tree().process_frame
+	
+	var current_scene = get_tree().current_scene
+	if current_scene and is_level_scene(current_scene.scene_file_path):
+		_auto_load_death_message_system()
+		# ✅ Auto-load DeathLimitUI
+		_auto_load_death_limit_ui()
 
 # Lưu tiến độ
 func save_progress():
@@ -60,6 +86,12 @@ func unlock_next_level():
 
 # Chuyển đến level - SỬA ĐƯỜNG DẪN
 func go_to_level(level_number: int):
+	# ✅ KIỂM TRA DEATH LIMIT TRƯỚC KHI VÀO LEVEL
+	if not can_player_die():
+		print("🚫 Cannot enter level - Death limit reached!")
+		_show_death_limit_block_message()
+		return
+		
 	current_level = level_number
 	print("GameManager: Switching to level ", level_number)
 	
@@ -68,11 +100,11 @@ func go_to_level(level_number: int):
 	
 	# Kiểm tra file có tồn tại không
 	if ResourceLoader.exists(level_path):
-		#get_tree().change_scene_to_file(level_path)
 		get_tree().change_scene_to_file.call_deferred(level_path)
 		print("Loading level: ", level_path)
-		# Show level title after a short delay
+		# Show level title and load death message system after a short delay
 		call_deferred("show_simple_level_title")
+		call_deferred("_ensure_death_message_system")
 		print("Level title function called")
 	else:
 		print("Level file not found: ", level_path)
@@ -89,9 +121,9 @@ func try_alternative_paths(level_number: int):
 	
 	for path in alternative_paths:
 		if ResourceLoader.exists(path):
-			#get_tree().change_scene_to_file(path)
 			get_tree().change_scene_to_file.call_deferred(path)
 			print("Found alternative path: ", path)
+			call_deferred("_ensure_death_message_system")
 			return
 	
 	print("No valid level file found for level ", level_number)
@@ -102,10 +134,9 @@ func try_alternative_paths(level_number: int):
 
 # ✅ HÀM MỚI: Chuyển qua WinScene
 func go_to_win_scene():
-	var win_scene_path = "res://WinScene.tscn"
+	var win_scene_path = "res://winScreen/WinScene.tscn"
 	
 	if ResourceLoader.exists(win_scene_path):
-		#get_tree().change_scene_to_file(win_scene_path)
 		get_tree().change_scene_to_file.call_deferred(win_scene_path)
 		print("✅ Loaded WinScene successfully!")
 	else:
@@ -119,7 +150,6 @@ func go_to_win_scene():
 		
 		for path in alternative_win_paths:
 			if ResourceLoader.exists(path):
-				#get_tree().change_scene_to_file(path)
 				get_tree().change_scene_to_file.call_deferred(path)
 				print("✅ Found WinScene at: ", path)
 				return
@@ -137,12 +167,32 @@ func reset_progress():
 	death_count = 0
 	save_progress()
 
-# Tăng death count
-func increment_death_count():
-	death_count += 1
-	death_count_changed.emit(death_count)
-	save_progress()
-	print("Death count: ", death_count)
+# ✅ Tăng death count - CẬP NHẬT ĐỂ SỬ DỤNG DEATH LIMIT
+func increment_death_count() -> bool:
+	# Kiểm tra daily limit trước
+	if not DeathLimitManager.can_die():
+		print("❌ Cannot die - Daily death limit already reached!")
+		# Hiện thông báo và về main menu
+		_show_death_limit_block_message()
+		return false
+		
+	var can_die = DeathLimitManager.try_add_death()
+	
+	if can_die:
+		# Tăng total death count (cho statistics)
+		death_count += 1
+		death_count_changed.emit(death_count)
+		save_progress()
+		
+		# ✅ THÊM POPUP SAU 5 LẦN CHẾT
+		Death5PopupManager.add_death()
+		
+		print("Death count: ", death_count, " | Daily: ", DeathLimitManager.current_deaths)
+		return true
+	else:
+		print("❌ Daily death limit reached!")
+		# Popup sẽ tự động hiện từ DeathLimitUI
+		return false
 
 # Get death count
 func get_death_count() -> int:
@@ -261,6 +311,44 @@ func test_level_title():
 	print("Testing level title display...")
 	create_level_title_ui()
 
+
+
+func is_level_scene(scene_path: String) -> bool:
+	# Check if scene is in All_Level directory or contains "Level" in path
+	return (scene_path.contains("All_Level") and scene_path.contains("Level")) or scene_path.contains("Level_")
+
+func _auto_load_death_message_system():
+	var current_scene = get_tree().current_scene
+	if not current_scene:
+		return
+		
+	# Check if DeathMessageSystem already exists
+	var existing_system = current_scene.get_node_or_null("DeathMessageSystem")
+	if existing_system:
+		print("DeathMessageSystem already exists in scene")
+		return
+	
+	# Create and add DeathMessageSystem node
+	var death_message_system = Node.new()
+	death_message_system.name = "DeathMessageSystem"
+	death_message_system.set_script(preload("res://UI/DeathMessageSystem.gd"))
+	current_scene.add_child(death_message_system)
+	print("✅ Auto-loaded DeathMessageSystem into ", current_scene.name, " (", current_scene.scene_file_path, ")")
+
+# Ensure DeathMessageSystem is loaded (called when explicitly loading levels)
+func _ensure_death_message_system():
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame  # Extra wait for safety
+	
+	var current_scene = get_tree().current_scene
+	if current_scene and is_level_scene(current_scene.scene_file_path):
+		_auto_load_death_message_system()
+
+# Manual function to load DeathMessageSystem (for testing)
+func manually_load_death_system():
+	_auto_load_death_message_system()
+
 # Debug function để in ra tất cả paths
 func debug_check_levels():
 	print("=== CHECKING LEVEL PATHS ===")
@@ -268,3 +356,138 @@ func debug_check_levels():
 		var level_path = "res://All_Level/Map Level " + str(i) + "/Level_" + str(i) + ".tscn"
 		var exists = ResourceLoader.exists(level_path)
 		print("Level ", i, ": ", level_path, " - Exists: ", exists)
+
+# ✅ CALLBACK CHO DEATH LIMIT SYSTEM
+func _on_death_limit_reached():
+	print("💀 Death limit reached - UI will handle display")
+
+func _on_daily_death_updated(current: int, max_deaths: int):
+	print("Daily deaths updated: %d/%d" % [current, max_deaths])
+
+# ✅ AUTO-LOAD DEATH LIMIT UI (NOW LOADS SCENE)
+func _auto_load_death_limit_ui():
+	var current_scene = get_tree().current_scene
+	if not current_scene:
+		return
+		
+	# Check if DeathLimitUI already exists
+	var existing_ui = current_scene.get_node_or_null("DeathLimitUI")
+	if existing_ui:
+		print("DeathLimitUI already exists in scene")
+		return
+	
+	# Load and instantiate DeathLimitUI scene
+	var death_ui_scene = preload("res://UI/DeathLimitUI.tscn")
+	var death_ui_instance = death_ui_scene.instantiate()
+	current_scene.add_child(death_ui_instance)
+	print("✅ Auto-loaded DeathLimitUI scene into %s" % current_scene.name)
+
+# ✅ PUBLIC API CHO EXTERNAL ACCESS
+func get_death_limit_manager():
+	return DeathLimitManager
+
+func get_remaining_deaths() -> int:
+	return DeathLimitManager.get_remaining_deaths()
+
+func can_player_die() -> bool:
+	return DeathLimitManager.can_die()
+
+# ✅ DEBUG FUNCTIONS
+func debug_reset_daily_deaths():
+	DeathLimitManager.force_reset()
+	_show_debug_message("🔄 Deaths reset to 0! Lives: 50/50")
+
+func debug_add_deaths(count: int):
+	DeathLimitManager.debug_add_deaths(count)
+	var remaining = DeathLimitManager.get_remaining_deaths()
+	_show_debug_message("💀 Added %d deaths. Lives remaining: %d/50" % [count, remaining])
+
+func debug_set_deaths(count: int):
+	DeathLimitManager.debug_set_deaths(count)
+	var remaining = DeathLimitManager.get_remaining_deaths()
+	_show_debug_message("🎯 Set deaths to %d. Lives remaining: %d/50" % [count, remaining])
+
+# ✅ QUICK TEST FUNCTIONS - Gọi từ console
+func quick_test_add_5_deaths():
+	debug_add_deaths(5)
+
+func quick_test_set_almost_full():
+	debug_set_deaths(49)  # Còn 1 mạng
+	_show_debug_message("⚠️ WARNING: Only 1 life remaining!")
+
+func quick_test_trigger_limit():
+	debug_set_deaths(50)  # Hết mạng
+	_show_debug_message("💀 DEATH LIMIT REACHED!")
+
+func quick_test_reset():
+	debug_reset_daily_deaths()
+
+# ✅ THÔNG BÁO DEATH LIMIT BLOCK TRONG GAMEMANAGER
+func _show_death_limit_block_message():
+	var current_scene = get_tree().current_scene
+	if not current_scene:
+		return
+		
+	_show_debug_message("🚫 GAME BLOCKED: Death limit reached! Come back tomorrow.")
+	
+	# Quay về main menu sau 3 giây
+	await get_tree().create_timer(3.0).timeout
+	var menu_paths = [
+		"res://Scene Main Start/main.tscn",
+		"res://UI/MainMenu.tscn", 
+		"res://MainMenu.tscn"
+	]
+	
+	for path in menu_paths:
+		if ResourceLoader.exists(path):
+			get_tree().change_scene_to_file(path)
+			return
+
+# ✅ THÊM HOTKEYS CHO DEBUG
+func _unhandled_input(event):
+	if event is InputEventKey and event.pressed:
+		# Chỉ hoạt động trong debug mode hoặc khi có level scenes
+		if not get_tree().current_scene:
+			return
+			
+		match event.keycode:
+			KEY_F9:  # Reset deaths
+				debug_reset_daily_deaths()
+				_show_debug_message("🔄 F9: Reset deaths to 0")
+			KEY_F10: # Add 10 deaths  
+				DeathLimitManager.debug_add_deaths(10)
+				_show_debug_message("💀 F10: Added 10 deaths")
+			KEY_F11: # Set to 49 (1 life left)
+				DeathLimitManager.debug_set_deaths(49)
+				_show_debug_message("⚠️ F11: Set to 49 deaths (1 life left)")
+			KEY_F12: # Show status
+				_show_death_status()
+
+# ✅ HELPER FUNCTIONS CHO DEBUG
+func _show_debug_message(text: String):
+	print(text)
+	# Tạo label tạm thời để hiện message trên màn hình
+	var current_scene = get_tree().current_scene
+	if not current_scene or not is_instance_valid(current_scene):
+		return
+		
+	var label = Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 20)
+	label.add_theme_color_override("font_color", Color.YELLOW)
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 2)
+	label.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
+	label.offset_top = 200
+	current_scene.add_child(label)
+	
+	# Xóa sau 2 giây
+	await get_tree().create_timer(2.0).timeout
+	if is_instance_valid(label):
+		label.queue_free()
+
+func _show_death_status():
+	var remaining = DeathLimitManager.get_remaining_deaths()
+	var current = DeathLimitManager.current_deaths
+	var status = "💀 Deaths: %d/50 | Lives: %d | Can die: %s" % [current, remaining, str(DeathLimitManager.can_die())]
+	_show_debug_message(status)
