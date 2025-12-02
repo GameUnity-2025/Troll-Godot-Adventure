@@ -84,7 +84,7 @@ func _update_display():
 		return
 		
 	var remaining = death_manager.get_remaining_deaths()
-	death_label.text = "Lives: %d/50" % remaining
+	death_label.text = "Lives: %d/60" % remaining
 	
 	# Color coding based on remaining lives
 	var color = Color.WHITE
@@ -113,7 +113,7 @@ func _update_time_display():
 		
 		# Update popup message if visible
 		if limit_popup and limit_popup.visible and message_label:
-			message_label.text = "You've died 50 times today!\nCome back tomorrow for more attempts.\n\nReset in: %02d:%02d:%02d" % [time_data.hours, time_data.minutes, time_data.seconds]
+			message_label.text = "You've died 60 times today!\nCome back tomorrow for more attempts.\n\nReset in: %02d:%02d:%02d" % [time_data.hours, time_data.minutes, time_data.seconds]
 	else:
 		time_label.visible = false
 
@@ -126,7 +126,7 @@ func _on_death_limit_reached():
 		return
 		
 	var time_data = death_manager.get_time_until_reset()
-	message_label.text = "You've died 50 times today!\nCome back tomorrow for more attempts.\n\nReset in: %02d:%02d:%02d" % [time_data.hours, time_data.minutes, time_data.seconds]
+	message_label.text = "You've died 60 times today!\nCome back tomorrow for more attempts.\n\nReset in: %02d:%02d:%02d" % [time_data.hours, time_data.minutes, time_data.seconds]
 	limit_popup.visible = true
 	if get_tree():
 		get_tree().paused = true

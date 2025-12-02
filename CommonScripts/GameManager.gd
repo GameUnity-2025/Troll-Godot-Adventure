@@ -455,10 +455,10 @@ func _unhandled_input(event):
 				debug_reset_daily_deaths()
 				_show_debug_message("🔄 F9: Reset deaths to 0")
 			KEY_F10: # Add 10 deaths  
-				DeathLimitManager.debug_add_deaths(10)
+				DeathLimitManager.debug_add_deaths(1)
 				_show_debug_message("💀 F10: Added 10 deaths")
 			KEY_F11: # Set to 49 (1 life left)
-				DeathLimitManager.debug_set_deaths(49)
+				DeathLimitManager.debug_set_deaths(59)
 				_show_debug_message("⚠️ F11: Set to 49 deaths (1 life left)")
 			KEY_F12: # Show status
 				_show_death_status()
@@ -489,5 +489,5 @@ func _show_debug_message(text: String):
 func _show_death_status():
 	var remaining = DeathLimitManager.get_remaining_deaths()
 	var current = DeathLimitManager.current_deaths
-	var status = "💀 Deaths: %d/50 | Lives: %d | Can die: %s" % [current, remaining, str(DeathLimitManager.can_die())]
+	var status = "💀 Deaths: %d/60 | Lives: %d | Can die: %s" % [current, remaining, str(DeathLimitManager.can_die())]
 	_show_debug_message(status)

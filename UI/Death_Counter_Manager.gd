@@ -30,6 +30,8 @@ func add_death(level_number: int = current_level):
 	# Auto save
 	save_death_counts()
 
+
+
 # Lấy số lần chết của level
 func get_death_count(level_number: int) -> int:
 	return death_counts.get(level_number, 0)

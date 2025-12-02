@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
 [ext_resource type="Texture2D" uid="uid://bbgwpoiadoloa" path="res://Pixel Adventure 1/Free/Background/background.png" id="4_lx6ph"]
 [ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]
-[ext_resource type="Texture2D" uid="uid://b1dxugyb7ux15" path="res://Hello.png" id="5_qhk7q"]
+[ext_resource type="Texture2D" uid="uid://rm8484wioc10" path="res://Pixel Adventure 1/Free/Traps/Trap2/Wood.png" id="5_qhk7q"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5jojc"]
 load_path = "res://.godot/imported/Start.png-c208608f7230fa004e488ed54ccce727.ctex"
@@ -42,9 +42,28 @@ texture_normal = SubResource("CompressedTexture2D_lx6ph")
 visible = false
 
 [node name="showInsAd" type="TouchScreenButton" parent="."]
-position = Vector2(30, 248)
-scale = Vector2(0.266325, 0.295876)
+texture_filter = 1
+position = Vector2(1142, 375)
+scale = Vector2(5.0625, 4.6875)
 texture_normal = ExtResource("5_qhk7q")
+
+[node name="TextEdit" type="TextEdit" parent="showInsAd"]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.6543
+offset_top = -3.30667
+offset_right = 245.346
+offset_bottom = 31.6933
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+text = "Earn 20 more lives by watching an ad !"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
 
 [connection signal="pressed" from="Start-BT" to="." method="_on_start_bt_pressed"]
 [connection signal="pressed" from="LevelSelectBt" to="." method="_on_level_select_bt_pressed"]

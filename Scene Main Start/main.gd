@@ -5,10 +5,13 @@ var versionFile = "res://version.json"
 var currentVersion
 var serverVersion
 var game_content_path = "res://game_content/AllLevel.pck"
-var inter = preload("res://CommonScripts/ads/Interstatial.gd")
-var ad = inter.new()
+#var inter = preload("res://CommonScripts/ads/Interstatial.gd")
+#var ad = inter.new()
+var rewar = preload("res://CommonScripts/ads/Rewarded.gd")
+var rewarAD = rewar.new()
 
 func _ready():
+	
 	# Connect TouchScreenButton signals
 	$"Start-BT".pressed.connect(_on_start_bt_down)
 	$"Start-BT".released.connect(_on_start_bt_up)
@@ -17,8 +20,8 @@ func _ready():
 	$"Quit-BT".pressed.connect(_on_quit_bt_down)
 	$"Quit-BT".released.connect(_on_quit_bt_up)
 	print("running patch downloader...")
-	
-	ad._on_load_pressed()
+	#ad._on_load_pressed()
+	rewarAD._on_load_pressed()
 	print("ad loaded")
 	
 	_load_version_file(versionFile)
@@ -182,6 +185,15 @@ func _file_version_request(result, _response_code, _headers, body):
 	else:
 		print("something went wrong, cannot load resource pack")
 
+func _on_death_limit_reached():
+	print("💀 Death limit reached - UI will handle display")
+
+func _on_daily_death_updated(current: int, max_deaths: int):
+	print("Daily deaths updated: %d/%d" % [current, max_deaths])
+
 func _on_show_ins_ad_pressed() -> void:
-	ad._on_show_pressed()
+	#ad._on_show_pressed()
+	rewarAD._on_show_pressed()
+	DeathLimitManager.debug_add_deaths(1)
 	print("showing ad")
+	
