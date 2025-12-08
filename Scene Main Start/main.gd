@@ -1,7 +1,7 @@
 extends Node2D
 
 var tween: Tween
-var versionFile = "res://version.json"
+var versionFile = "res://game_content/version.json"
 var currentVersion
 var serverVersion
 var game_content_path = "res://game_content/AllLevel.pck"
@@ -11,7 +11,6 @@ var rewar = preload("res://CommonScripts/ads/Rewarded.gd")
 var rewarAD = rewar.new()
 
 func _ready():
-	
 	# Connect TouchScreenButton signals
 	$"Start-BT".pressed.connect(_on_start_bt_down)
 	$"Start-BT".released.connect(_on_start_bt_up)
@@ -116,7 +115,7 @@ func _server_version_request(result, _response_code, _headers, body):
 		#Download new server game content file
 		var http_request = HTTPRequest.new()
 		add_child(http_request)
-		http_request.request_completed.connect(self._file_version_request)
+		http_request.request_completed.connect(self.file_version_request)
 		
 		var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/AllLevel.pck")
 		if error != OK:
@@ -126,11 +125,12 @@ func _server_version_request(result, _response_code, _headers, body):
 	
 
 #Getting JSON version file local
-func _load_version_file(fileVersion: String):
-	if FileAccess.file_exists(versionFile):
-		var dataFromFile = FileAccess.open(versionFile, FileAccess.READ)
+func _load_version_file(path: String):
+	if FileAccess.file_exists(path):
+		var dataFromFile = FileAccess.open(path, FileAccess.READ)
 		var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
 		var version = versionFromfile["version"]
+		dataFromFile.close()
 		print(version)
 		currentVersion = version
 	else:
@@ -142,48 +142,50 @@ func _load_level_resources():
 	else: 
 		print("no game content file found")
 
-func _file_version_request(result, _response_code, _headers, body):
+func file_version_request(result, _response_code, _headers, body):
 	
 	print("downloading files...")
-	
 	
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("patch could not be downloaded")
 	print(HTTPRequest.RESULT_SUCCESS)
 	
-	var file = FileAccess.open("res://game_content/AllLevel.pck", FileAccess.WRITE)
+	var file = FileAccess.open(game_content_path, FileAccess.WRITE)
+	#var file = FileAccess.file_exists(game_content_path)
 	if file:
 		file.store_buffer(body)
 		file.close()
 		print("saving new file to game_content...")
+		if ProjectSettings.load_resource_pack(game_content_path):
+			print("load new resource pack...")
+			
+			#load local version and modify
+			#optimize later so doesnt have to open twice 
+			var dataFromFile = FileAccess.open(versionFile, FileAccess.READ)
+			var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
+			versionFromfile["version"] = serverVersion
+			dataFromFile.close()
+			#debug 
+			var version = versionFromfile["version"]
+			print("updated version")
+			print(version)
+			#debug
+			
+			var writeFile = FileAccess.open(versionFile, FileAccess.WRITE)
+			print(writeFile)
+			var stringified = JSON.stringify(versionFromfile,"\t")
+			print(stringified)
+			writeFile.store_string(stringified)
+			writeFile.close()
+			
+			
+			currentVersion = version
+			
+			$Loading.visible = false
+		else:
+			print("something went wrong, cannot load resource pack")
 	else:
 		print("Error saving file.")
-	if ProjectSettings.load_resource_pack("res://game_content/AllLevel.pck"):
-		print("load new resource pack...")
-		
-		#load local version and modify
-		#optimize later so doesnt have to open twice 
-		var dataFromFile = FileAccess.open(versionFile, FileAccess.READ)
-		var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
-		versionFromfile["version"] = serverVersion
-		
-		#debug 
-		var version = versionFromfile["version"]
-		print("updated version")
-		print(version)
-		#debug
-		
-		var writeFile = FileAccess.open(versionFile, FileAccess.WRITE)
-		var stringified = JSON.stringify(versionFromfile,"\t")
-		writeFile.store_string(stringified)
-		writeFile.close()
-		
-		
-		currentVersion = version
-		
-		$Loading.visible = false
-	else:
-		print("something went wrong, cannot load resource pack")
 
 func _on_death_limit_reached():
 	print("💀 Death limit reached - UI will handle display")
@@ -194,6 +196,6 @@ func _on_daily_death_updated(current: int, max_deaths: int):
 func _on_show_ins_ad_pressed() -> void:
 	#ad._on_show_pressed()
 	rewarAD._on_show_pressed()
-	DeathLimitManager.debug_add_deaths(1)
+	DeathLimitManager.try_reduce_death()
 	print("showing ad")
 	

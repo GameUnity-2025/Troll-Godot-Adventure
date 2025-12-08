@@ -12,6 +12,10 @@ signal level_unlocked(level_number: int)
 signal death_count_changed(new_count: int)
 
 func _ready():
+	if OS.get_name() == "Android":
+		print("on mobile, asking permission")
+		OS.request_permission("MANAGE_EXTERNAL_STORAGE")
+		print(OS.request_permissions())
 	# ✅ Connect signals với AutoLoad DeathLimitManager
 	DeathLimitManager.death_limit_reached.connect(_on_death_limit_reached)
 	DeathLimitManager.death_count_updated.connect(_on_daily_death_updated)

@@ -54,7 +54,7 @@ func try_add_death() -> bool:
 	return true
 
 func try_reduce_death():
-	if current_deaths > 19 and current_deaths < MAX_DEATHS_PER_DAY:
+	if current_deaths > 19 and current_deaths < MAX_DEATHS_PER_DAY - 20 :
 		current_deaths = current_deaths - 20
 		death_count_updated.emit(current_deaths, MAX_DEATHS_PER_DAY)
 		_save_data()
@@ -153,7 +153,6 @@ func _auto_save() -> void:
 func debug_add_deaths(count: int) -> void:
 	for i in count:
 		if not try_add_death():
-		
 			break
 	print("🐛 DEBUG: Added %d deaths, total: %d/%d" % [count, current_deaths, MAX_DEATHS_PER_DAY])
 
