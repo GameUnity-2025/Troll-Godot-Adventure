@@ -37,7 +37,7 @@ func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(self._server_version_request)
 	
-	var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/main/UpdateFiles/serverVersion.json")
+	var error = http_request.request("https://raw.githubusercontent.com/GameUnity-2025/Troll-Godot-Adventure/refs/heads/main/UpdateFiles/serverVersion.json")
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")	
 
@@ -97,7 +97,7 @@ func _on_level_select_bt_pressed() -> void:
 
 #HTTPRequest for server version completion
 func _server_version_request(result, _response_code, _headers, body):
-	print("downloading...")
+	print("downloading version file ...")
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("patch could not be downloaded")
 	print(HTTPRequest.RESULT_SUCCESS)
@@ -106,8 +106,7 @@ func _server_version_request(result, _response_code, _headers, body):
 	#var json = JSON.new()
 	var content = JSON.parse_string(body.get_string_from_utf8())
 	var response = content["version"]
-	print("Content from remote file:")
-	print(response)
+	print("remote version" + str(response))
 	serverVersion = response
 	
 	#Check version
