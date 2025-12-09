@@ -1,14 +1,16 @@
 extends Node2D
 
 var tween: Tween
-var versionFile = "res://game_content/version.json"
+var versionFile = "user://version.json"
 var currentVersion
 var serverVersion
-var game_content_path = "res://game_content/AllLevel.pck"
+var game_content_path = "user://AllLevel.pck"
 #var inter = preload("res://CommonScripts/ads/Interstatial.gd")
 #var ad = inter.new()
 var rewar = preload("res://CommonScripts/ads/Rewarded.gd")
 var rewarAD = rewar.new()
+var FileControl = preload("res://CommonScripts/FileControl/FileControl.gd")
+var fControl = FileControl.new()
 
 func _ready():
 	# Connect TouchScreenButton signals
@@ -23,9 +25,11 @@ func _ready():
 	rewarAD._on_load_pressed()
 	print("ad loaded")
 	
-	_load_version_file(versionFile)
+	#debug update
+	#fControl._debug_update_by_version()
 	
-	_load_level_resources()
+	currentVersion = fControl._local_version_check()
+	fControl._check_and_load_resource_pack()
 	
 	
 	#creating new HTTPRequest 
@@ -124,17 +128,17 @@ func _server_version_request(result, _response_code, _headers, body):
 		print("version up to date...")
 	
 
-#Getting JSON version file local
-func _load_version_file(path: String):
-	if FileAccess.file_exists(path):
-		var dataFromFile = FileAccess.open(path, FileAccess.READ)
-		var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
-		var version = versionFromfile["version"]
-		dataFromFile.close()
-		print(version)
-		currentVersion = version
-	else:
-		print("Missing version file ???")
+##Getting JSON version file local
+#func _load_version_file(path: String):
+	#if FileAccess.file_exists(path):
+		#var dataFromFile = FileAccess.open(path, FileAccess.READ)
+		#var versionFromfile = JSON.parse_string(dataFromFile.get_as_text())
+		#var version = versionFromfile["version"]
+		#dataFromFile.close()
+		#print(version)
+		#currentVersion = version
+	#else:
+		#print("Missing version file ???")
 
 func _load_level_resources():
 	if ProjectSettings.load_resource_pack(game_content_path):
