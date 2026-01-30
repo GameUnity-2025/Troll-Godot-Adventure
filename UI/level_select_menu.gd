@@ -374,13 +374,68 @@ func animate_button_down(button: Node):
 	if tween:
 		tween.kill()
 	tween = create_tween()
-	tween.tween_property(button, "scale", Vector2(0.9, 0.9), 0.1)  # ✅ FIX: Dùng Vector2 cố định
+	
+	# Xử lý khác nhau cho Control và Node2D
+	if button is Control:
+		# Nếu là Button trong container với TouchScreenButton child, animate child thay vì parent
+		if button is Button and button.get_child_count() > 0:
+			var touch_button = button.get_child(0)
+			if touch_button is Node2D:
+				animate_button_down(touch_button)  # Recursive call cho TouchScreenButton
+				return
+		
+		# Control nodes thông thường - dùng pivot_offset
+		button.pivot_offset = button.size / 2
+		tween.tween_property(button, "scale", Vector2(0.9, 0.9), 0.1)
+	elif button is Node2D:
+		# Node2D (TouchScreenButton) - lưu base scale và scale từ center
+		if not button.has_meta("base_scale"):
+			button.set_meta("base_scale", button.scale)
+		if not button.has_meta("base_position"):
+			button.set_meta("base_position", button.position)
+		
+		var base_scale = button.get_meta("base_scale")
+		var base_pos = button.get_meta("base_position")
+		var target_scale = base_scale * 0.9
+		
+		# Tính toán position offset để giữ center cố định
+		var texture_size = Vector2.ZERO
+		if button.texture_normal:
+			texture_size = button.texture_normal.get_size()
+		var center_offset = texture_size * base_scale * 0.05  # 0.05 = (1.0 - 0.9) / 2
+		
+		tween.parallel().tween_property(button, "scale", target_scale, 0.1)
+		tween.parallel().tween_property(button, "position", base_pos + center_offset, 0.1)
 
 func animate_button_up(button: Node):
 	if tween:
 		tween.kill()
 	tween = create_tween()
-	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1)  # ✅ FIX: Dùng Vector2 cố định
+	
+	# Xử lý khác nhau cho Control và Node2D
+	if button is Control:
+		# Nếu là Button trong container với TouchScreenButton child, animate child thay vì parent
+		if button is Button and button.get_child_count() > 0:
+			var touch_button = button.get_child(0)
+			if touch_button is Node2D:
+				animate_button_up(touch_button)  # Recursive call cho TouchScreenButton
+				return
+		
+		# Control nodes thông thường - dùng pivot_offset
+		button.pivot_offset = button.size / 2
+		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1)
+	elif button is Node2D:
+		# Node2D (TouchScreenButton) - restore về base scale và position
+		if not button.has_meta("base_scale"):
+			button.set_meta("base_scale", button.scale)
+		if not button.has_meta("base_position"):
+			button.set_meta("base_position", button.position)
+		
+		var base_scale = button.get_meta("base_scale")
+		var base_pos = button.get_meta("base_position")
+		
+		tween.parallel().tween_property(button, "scale", base_scale, 0.1)
+		tween.parallel().tween_property(button, "position", base_pos, 0.1)
 
 # Khi nhấn xuống level button
 func _on_level_button_pressed(button: TouchScreenButton):

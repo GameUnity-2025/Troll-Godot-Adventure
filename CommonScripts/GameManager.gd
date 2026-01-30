@@ -12,10 +12,6 @@ signal level_unlocked(level_number: int)
 signal death_count_changed(new_count: int)
 
 func _ready():
-	if OS.get_name() == "Android":
-		print("on mobile, asking permission")
-		OS.request_permission("MANAGE_EXTERNAL_STORAGE")
-		print(OS.request_permissions())
 	# ✅ Connect signals với AutoLoad DeathLimitManager
 	DeathLimitManager.death_limit_reached.connect(_on_death_limit_reached)
 	DeathLimitManager.death_count_updated.connect(_on_daily_death_updated)
@@ -459,10 +455,10 @@ func _unhandled_input(event):
 				debug_reset_daily_deaths()
 				_show_debug_message("🔄 F9: Reset deaths to 0")
 			KEY_F10: # Add 10 deaths  
-				DeathLimitManager.debug_add_deaths(1)
+				DeathLimitManager.debug_add_deaths(10)
 				_show_debug_message("💀 F10: Added 10 deaths")
 			KEY_F11: # Set to 49 (1 life left)
-				DeathLimitManager.debug_set_deaths(59)
+				DeathLimitManager.debug_set_deaths(49)
 				_show_debug_message("⚠️ F11: Set to 49 deaths (1 life left)")
 			KEY_F12: # Show status
 				_show_death_status()
@@ -493,5 +489,68 @@ func _show_debug_message(text: String):
 func _show_death_status():
 	var remaining = DeathLimitManager.get_remaining_deaths()
 	var current = DeathLimitManager.current_deaths
-	var status = "💀 Deaths: %d/60 | Lives: %d | Can die: %s" % [current, remaining, str(DeathLimitManager.can_die())]
+	var status = "💀 Deaths: %d/50 | Lives: %d | Can die: %s" % [current, remaining, str(DeathLimitManager.can_die())]
 	_show_debug_message(status)
+
+
+
+
+# ----- PHẦN BỔ SUNG CHO SPECIAL MODE (Thêm vào GameManager.gd) -----
+
+# Biến cờ để biết đang chơi chế độ nào (True = Special, False = Main)
+var is_special_mode: bool = false
+
+# Dữ liệu cốt truyện (Key: Level, Value: Danh sách các câu thoại)
+# Bạn tự thêm các dòng chữ cho các level khác (3, 4, 5...)
+var special_level_stories = {
+	1: [
+		"Chào mừng đến với Vùng Hỗn Mang...",
+		"Tại đây, quy tắc vật lý không còn đúng nữa.",
+		"Hãy chuẩn bị tinh thần...",
+		"Hỡi Jump King vĩ đại!"
+	],
+	2: [
+		"Bạn tưởng thoát rồi sao?",
+		"Thử thách thực sự bây giờ mới bắt đầu.",
+		"Đừng dừng lại hãy tiếp tục chạy!"
+	]
+}
+
+# Hàm bắt đầu Special Level (Gọi từ Menu Special)
+func start_special_level(level_number: int):
+	# 1. Bật chế độ Special
+	is_special_mode = true
+	current_level = level_number
+	
+	# 2. Kiểm tra Death Limit (Vẫn áp dụng luật chết 50 lần)
+	if not can_player_die():
+		_show_death_limit_block_message()
+		return
+
+	# 3. Chuyển sang màn hình Intro trước
+	# Đảm bảo đường dẫn này đúng với nơi bạn lưu file Intro ở Bước 3
+	var intro_path = "res://Special Main Scene/SpecialLevelIntro.tscn"
+	
+	if ResourceLoader.exists(intro_path):
+		get_tree().change_scene_to_file(intro_path)
+	else:
+		print("❌ Không tìm thấy Scene Intro, vào thẳng game!")
+		go_to_actual_special_level(level_number)
+
+# Hàm vào màn chơi thật (Được gọi sau khi Intro chạy xong)
+func go_to_actual_special_level(level_number: int):
+	print("Loading Special Level: ", level_number)
+	
+	# Sửa đường dẫn này theo nơi bạn lưu map Special
+	# Ví dụ: res://All_Level/Special Maps/Special_Level_1.tscn
+	var path = "res://All_Level/Special_Level/Special_Level_" + str(level_number) + "/Special_Level_" + str(level_number) + ".tscn"
+
+	
+	if ResourceLoader.exists(path):
+		get_tree().change_scene_to_file(path)
+		# Phát nhạc level Special
+		AudioController.play_level_special_music()
+		# Tự động load hệ thống tin nhắn chết
+		call_deferred("_ensure_death_message_system")
+	else:
+		print("❌ Không tìm thấy file Special Level: ", path)

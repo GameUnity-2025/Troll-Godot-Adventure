@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b1kmc7vccweyp"
+path="res://.godot/imported/canción para hacer MEWING .mp3-12110bbb1e0b0af2ba0c5beb3f66dd0e.mp3str"
+
+[deps]
+
+source_file="res://audio/audio_assets/canción para hacer MEWING .mp3"
+dest_files=["res://.godot/imported/canción para hacer MEWING .mp3-12110bbb1e0b0af2ba0c5beb3f66dd0e.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

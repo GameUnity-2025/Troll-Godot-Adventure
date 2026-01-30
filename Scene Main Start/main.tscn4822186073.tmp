@@ -1,0 +1,89 @@
+[gd_scene load_steps=9 format=3 uid="uid://dxmmwaa2m58ff"]
+
+[ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
+[ext_resource type="Texture2D" uid="uid://7ycv8cx5i8ns" path="res://Pixel Adventure 1/Free/Background/background_without_troll.png" id="2_n5er7"]
+[ext_resource type="Texture2D" uid="uid://7x4kdc7sqhjn" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_113827-removebg-preview.png" id="4_6808f"]
+[ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://rm8484wioc10" path="res://Pixel Adventure 1/Free/Traps/Trap2/Wood.png" id="5_qhk7q"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5jojc"]
+load_path = "res://.godot/imported/Start.png-c208608f7230fa004e488ed54ccce727.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_lx6ph"]
+load_path = "res://.godot/imported/Quit.png-3c4219bab98c844c708a41935daeac51.ctex"
+
+[node name="main" type="Node2D"]
+script = ExtResource("1_1bvp3")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_direction = 1
+offset_right = 1270.0
+offset_bottom = 720.0
+size_flags_stretch_ratio = 0.0
+texture = ExtResource("2_n5er7")
+expand_mode = 1
+
+[node name="StartRoot" type="Node2D" parent="."]
+position = Vector2(630, 207)
+
+[node name="Start-BT" type="TouchScreenButton" parent="StartRoot"]
+position = Vector2(-143, -146)
+scale = Vector2(0.208984, 0.21582)
+texture_normal = SubResource("CompressedTexture2D_5jojc")
+
+[node name="LevelRoot" type="Node2D" parent="."]
+position = Vector2(635, 341)
+
+[node name="LevelSelectBt" type="TouchScreenButton" parent="LevelRoot"]
+position = Vector2(-136, -87)
+scale = Vector2(0.133143, 0.140526)
+texture_normal = ExtResource("5_lquwl")
+
+[node name="QuitRoot" type="Node2D" parent="."]
+position = Vector2(641, 481)
+
+[node name="Quit-BT" type="TouchScreenButton" parent="QuitRoot"]
+position = Vector2(-147, -94)
+scale = Vector2(0.2, 0.2)
+texture_normal = SubResource("CompressedTexture2D_lx6ph")
+
+[node name="TrollRoot" type="Node2D" parent="."]
+position = Vector2(1134, 528)
+
+[node name="Troll-Bt" type="TouchScreenButton" parent="TrollRoot"]
+position = Vector2(-98, -74.9999)
+scale = Vector2(0.922374, 1.02703)
+texture_normal = ExtResource("4_6808f")
+
+[node name="Loading" parent="." instance=ExtResource("2_5jojc")]
+visible = false
+
+[node name="showInsAd" type="TouchScreenButton" parent="."]
+texture_filter = 1
+position = Vector2(1142, 375)
+scale = Vector2(5.0625, 4.6875)
+texture_normal = ExtResource("5_qhk7q")
+
+[node name="TextEdit" type="TextEdit" parent="showInsAd"]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.6543
+offset_top = -3.30667
+offset_right = 245.346
+offset_bottom = 31.6933
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+text = "Earn 20 more lives by watching an ad !"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+
+[connection signal="pressed" from="StartRoot/Start-BT" to="." method="_on_start_bt_pressed"]
+[connection signal="pressed" from="LevelRoot/LevelSelectBt" to="." method="_on_level_select_bt_pressed"]
+[connection signal="pressed" from="QuitRoot/Quit-BT" to="." method="_on_quit_bt_pressed"]
+[connection signal="pressed" from="showInsAd" to="." method="_on_show_ins_ad_pressed"]
