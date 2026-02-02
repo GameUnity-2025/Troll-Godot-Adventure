@@ -1,11 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cb6jqesiik6jl"]
+[gd_scene load_steps=9 format=3 uid="uid://cb6jqesiik6jl"]
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_hmd4f"]
 [ext_resource type="Texture2D" uid="uid://cwswcr0gqc3b6" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="2_hmd4f"]
+[ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_loading"]
 [ext_resource type="Texture2D" uid="uid://bky10qw4s16e" path="res://Pixel Adventure 1/Free/Other/Screenshot 2026-01-22 111352.png" id="3_hmd4f"]
 [ext_resource type="Texture2D" uid="uid://cq66kicrjgn80" path="res://Pixel Adventure 1/Free/Other/Screenshot 2026-01-22 112546.png" id="4_ghfta"]
 [ext_resource type="Texture2D" uid="uid://dqfbs5x7b2j67" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_112600-removebg-preview.png" id="5_bqe4f"]
 [ext_resource type="Texture2D" uid="uid://7x4kdc7sqhjn" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_113827-removebg-preview.png" id="6_hmd4f"]
+[ext_resource type="Texture2D" uid="uid://rm8484wioc10" path="res://Pixel Adventure 1/Free/Traps/Trap2/Wood.png" id="7_wood"]
 
 [node name="main2" type="Node2D"]
 script = ExtResource("1_hmd4f")
@@ -58,7 +60,35 @@ position = Vector2(-98, -74.9999)
 scale = Vector2(0.922374, 1.02703)
 texture_normal = ExtResource("6_hmd4f")
 
+[node name="Loading" parent="." instance=ExtResource("2_loading")]
+visible = false
+
+[node name="showInsAd" type="TouchScreenButton" parent="."]
+texture_filter = 1
+position = Vector2(1142, 375)
+scale = Vector2(5.0625, 4.6875)
+texture_normal = ExtResource("7_wood")
+
+[node name="TextEdit" type="TextEdit" parent="showInsAd"]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -67.6543
+offset_top = -3.30667
+offset_right = 245.346
+offset_bottom = 31.6933
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+text = "Give us some snacks by watching an ad !"
+scroll_fit_content_height = true
+scroll_fit_content_width = true
+
 [connection signal="pressed" from="StartRoot/Start-BT" to="." method="_on_start_bt_pressed"]
 [connection signal="pressed" from="LevelRoot/LevelSelectBt" to="." method="_on_level_select_bt_pressed"]
 [connection signal="pressed" from="QuitRoot/Quit-BT" to="." method="_on_quit_bt_pressed"]
 [connection signal="pressed" from="TrollRoot/Troll-Bt" to="." method="_on_troll_bt_pressed"]
+[connection signal="pressed" from="showInsAd" to="." method="_on_show_ins_ad_pressed"]

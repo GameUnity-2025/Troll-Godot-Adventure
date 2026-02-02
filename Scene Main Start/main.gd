@@ -280,7 +280,8 @@ func _server_version_request(result, _response_code, _headers, body):
 	#Check version
 	
 	if(serverVersion > currentVersion):
-		$Loading.visible = true
+		if has_node("Loading"):
+			$Loading.visible = true
 		print("new update is available...")
 		
 		#Download new server game content file
@@ -352,7 +353,8 @@ func file_version_request(result, _response_code, _headers, body):
 			
 			currentVersion = version
 			
-			$Loading.visible = false
+			if has_node("Loading"):
+				$Loading.visible = false
 		else:
 			print("something went wrong, cannot load resource pack")
 	else:
