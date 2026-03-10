@@ -1,6 +1,6 @@
 [gd_scene load_steps=17 format=3 uid="uid://fbx4rnpaur5w"]
 
-[ext_resource type="Texture2D" uid="uid://cwswcr0gqc3b6" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="1_oxg48"]
+[ext_resource type="Texture2D" uid="uid://duvxrbqjmafu3" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="1_oxg48"]
 [ext_resource type="Texture2D" uid="uid://dsl4u3rokkj1y" path="res://Pixel Adventure 1/Free/Main Characters/Ninja Frog/Run (32x32).png" id="2_oxg48"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxg48"]

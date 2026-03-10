@@ -1,8 +1,8 @@
 [gd_scene load_steps=10 format=3 uid="uid://cb6jqesiik6jl"]
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_hmd4f"]
-[ext_resource type="Texture2D" uid="uid://cwswcr0gqc3b6" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="2_hmd4f"]
-[ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_loading"]
+[ext_resource type="Texture2D" uid="uid://duvxrbqjmafu3" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="2_hmd4f"]
+[ext_resource type="PackedScene" uid="uid://fbx4rnpaur5w" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_loading"]
 [ext_resource type="Texture2D" uid="uid://bky10qw4s16e" path="res://Pixel Adventure 1/Free/Other/Screenshot 2026-01-22 111352.png" id="3_hmd4f"]
 [ext_resource type="Texture2D" uid="uid://cq66kicrjgn80" path="res://Pixel Adventure 1/Free/Other/Screenshot 2026-01-22 112546.png" id="4_ghfta"]
 [ext_resource type="Texture2D" uid="uid://dqfbs5x7b2j67" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_112600-removebg-preview.png" id="5_bqe4f"]
