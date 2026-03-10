@@ -30,3 +30,7 @@ static func _get_plugin(plugin_name : String) -> Object:
 		printerr(plugin_name + " not found, make sure you marked all 'PoingAdMob' plugins on export tab")
 
 	return null
+
+static func safe_connect(plugin : Object, signal_name : String, callable : Callable, flags := 0) -> void:
+	if plugin and not plugin.is_connected(signal_name, callable):
+		plugin.connect(signal_name, callable, flags)

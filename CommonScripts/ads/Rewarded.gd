@@ -6,6 +6,8 @@ var on_user_earned_reward_listener := OnUserEarnedRewardListener.new()
 
 func _ready() -> void:
 	#The initializate needs to be done only once, ideally at app launch.
+	# Initialize on next frame to avoid blocking Godot's first render
+	await get_tree().process_frame
 	MobileAds.initialize()
 	_full_screen_content_callback.on_ad_clicked = func() -> void:
 		print("on_ad_clicked")
@@ -40,7 +42,7 @@ func _on_load_pressed():
 		_rewarded_ad = rewarded_ad
 		_rewarded_ad.full_screen_content_callback = _full_screen_content_callback
 		
-	RewardedAdLoader.new().load(unit_id, AdRequest.new(), rewarded_ad_load_callback)
+		RewardedAdLoader.new().load(unit_id, AdRequest.new(), rewarded_ad_load_callback)
 
 func _on_show_pressed():
 	if _rewarded_ad:

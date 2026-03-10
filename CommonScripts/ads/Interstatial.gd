@@ -35,7 +35,6 @@ func _on_load_pressed():
 		print("interstitial ad loaded" + str(interstitial_ad._uid))
 		_interstitial_ad = interstitial_ad
 		_interstitial_ad.full_screen_content_callback = _full_screen_content_callback
-
 	InterstitialAdLoader.new().load(unit_id, AdRequest.new(), interstitial_ad_load_callback)
 	
 func _on_show_pressed():

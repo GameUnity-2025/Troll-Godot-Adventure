@@ -4,7 +4,7 @@ var tween: Tween
 var versionFile = "user://version.json"
 var currentVersion
 var serverVersion
-var game_content_path = "user://AllLevel_Test.pck"
+var game_content_path = "user://test2s1.pck"
 #var inter = preload("res://CommonScripts/ads/Interstatial.gd")
 #var ad = inter.new()
 var rewar = preload("res://CommonScripts/ads/Rewarded.gd")
@@ -60,8 +60,12 @@ func _ready():
 			_on_troll_bt_up()
 	)
 	print("running patch downloader...")
+	# Defer AdMob init to next frame so Godot renders first frame before blocking
+	# This fixes gray screen on remote deploy
+	add_child(rewarAD)
+	await get_tree().process_frame
 	#ad._on_load_pressed()
-	rewarAD._on_load_pressed()
+	rewarAD._on_load_pressed.call_deferred()
 	print("ad loaded")
 	
 	#debug update

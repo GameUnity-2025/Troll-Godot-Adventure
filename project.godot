@@ -30,7 +30,6 @@ Death5PopupManager="*res://CommonScripts/Death5PopupManager.gd"
 
 window/size/viewport_width=1270
 window/size/viewport_height=720
-window/size/mode=3
 window/size/initial_position_type=0
 window/stretch/mode="canvas_items"
 

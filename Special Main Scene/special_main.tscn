@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://cq66kicrjgn80" path="res://Pixel Adventure 1/Free/Other/Screenshot 2026-01-22 112546.png" id="4_ghfta"]
 [ext_resource type="Texture2D" uid="uid://dqfbs5x7b2j67" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_112600-removebg-preview.png" id="5_bqe4f"]
 [ext_resource type="Texture2D" uid="uid://7x4kdc7sqhjn" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_113827-removebg-preview.png" id="6_hmd4f"]
-[ext_resource type="Texture2D" uid="uid://dw3lf8u173k63" path="res://UI/icons/e17075b681a081dc8905ed016b8f919d.png" id="8_dv5eh"]
+[ext_resource type="Texture2D" uid="uid://0qq43bpocr8m" path="res://UI/giftADS.png" id="8_dv5eh"]
 [ext_resource type="Script" uid="uid://e37qq70japkj" path="res://Scene Main Start/show_ins_ad.gd" id="8_show"]
 
 [node name="main2" type="Node2D"]
@@ -66,8 +66,8 @@ visible = false
 
 [node name="showInsAd" type="TouchScreenButton" parent="."]
 texture_filter = 1
-position = Vector2(1128, 375)
-scale = Vector2(0.201, 0.186)
+position = Vector2(1044, 334)
+scale = Vector2(0.0961914, 0.0898438)
 texture_normal = ExtResource("8_dv5eh")
 script = ExtResource("8_show")
 

@@ -5,9 +5,8 @@ var versionFileUser = "user://version.json"
 var finalPath = "res://game_content/AllLevel.pck"
 var currentVersion
 var serverVersion
-# 🧪 TEST MODE: Đổi đường dẫn này để test file khác
-var game_content_path = "res://game_content/AllLevel_TEST.pck"  # ← Đổi tên file test vào đây
-var game_content_user = "user://AllLevel.pck"
+var game_content_path = "res://game_content/test2s1.pck"  
+var game_content_user = "user://test2s1.pck"
 
 func _debug_update_by_version():
 	#Assign version 
