@@ -1,11 +1,111 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4pyc1r527cgp"]
+[gd_scene load_steps=17 format=3 uid="uid://fbx4rnpaur5w"]
 
-[ext_resource type="Texture2D" uid="uid://bbgwpoiadoloa" path="res://Pixel Adventure 1/Free/Background/background.png" id="1_evfxr"]
-[ext_resource type="Texture2D" uid="uid://3hggc4dvjcgv" path="res://UI/Banner/13.png" id="2_oxg48"]
+[ext_resource type="Texture2D" uid="uid://cwswcr0gqc3b6" path="res://Pixel Adventure 1/Free/Background/Special_scenebg_without_troll.png" id="1_oxg48"]
+[ext_resource type="Texture2D" uid="uid://dsl4u3rokkj1y" path="res://Pixel Adventure 1/Free/Main Characters/Ninja Frog/Run (32x32).png" id="2_oxg48"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxg48"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.3, 0.813334, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eg6mg"]
 atlas = ExtResource("2_oxg48")
-region = Rect2(64.8177, 224.801, 62.2888, 30.4464)
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ep7c0"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wcr7g"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ucobh"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xh24h"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ed8bv"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idnk8"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pc12u"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ktu4g"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jkb2"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrsw4"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4rmm6"]
+atlas = ExtResource("2_oxg48")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_piych"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eg6mg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ep7c0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wcr7g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ucobh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xh24h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ed8bv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idnk8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pc12u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ktu4g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jkb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lrsw4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4rmm6")
+}],
+"loop": true,
+"name": &"run",
+"speed": 20.0
+}]
 
 [node name="Loading" type="Node2D"]
 
@@ -14,20 +114,33 @@ texture_filter = 1
 texture_repeat = 2
 offset_right = 1270.0
 offset_bottom = 720.0
-texture = ExtResource("1_evfxr")
+texture = ExtResource("1_oxg48")
 expand_mode = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(612.5, 651.125)
-scale = Vector2(12.5323, 4.075)
-texture = SubResource("AtlasTexture_eg6mg")
+position = Vector2(575.501, 652.125)
+scale = Vector2(12.5323, 3.94167)
 
 [node name="Label" type="Label" parent="."]
 texture_filter = 1
-offset_left = 400.0
-offset_top = 636.0
-offset_right = 839.0
-offset_bottom = 691.0
+offset_left = 331.001
+offset_top = 635.0
+offset_right = 770.001
+offset_bottom = 690.0
 theme_override_font_sizes/font_size = 40
 text = "Downloading Update..."
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = 313.0
+offset_top = 603.0
+offset_right = 842.0
+offset_bottom = 624.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_oxg48")
+show_percentage = false
+
+[node name="Runner" type="AnimatedSprite2D" parent="."]
+position = Vector2(324, 589)
+sprite_frames = SubResource("SpriteFrames_piych")
+animation = &"run"
+autoplay = "run"

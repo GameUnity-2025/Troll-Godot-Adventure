@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://dxmmwaa2m58ff"]
 
 [ext_resource type="Script" uid="uid://rfgme1u3dwts" path="res://Scene Main Start/main.gd" id="1_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://c4pyc1r527cgp" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
+[ext_resource type="PackedScene" uid="uid://fbx4rnpaur5w" path="res://Scene Main Start/LoadingScene/loading.tscn" id="2_5jojc"]
 [ext_resource type="Texture2D" uid="uid://7ycv8cx5i8ns" path="res://Pixel Adventure 1/Free/Background/background_without_troll.png" id="2_n5er7"]
 [ext_resource type="Texture2D" uid="uid://7x4kdc7sqhjn" path="res://Pixel Adventure 1/Free/Other/Screenshot_2026-01-22_113827-removebg-preview.png" id="4_6808f"]
 [ext_resource type="Texture2D" uid="uid://b3g8nr8uqodwi" path="res://UI/ChatGPT Image 13_14_08 16 thg 9, 2025.png" id="5_lquwl"]

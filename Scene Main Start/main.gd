@@ -325,22 +325,36 @@ func _process(delta):
 			_update_progress_ui(fake_progress)
 
 func _update_progress_ui(value: float):
+
 	value = clamp(value, 0, 100)
+
 	if has_node("Loading/ProgressBar"):
 		var bar = $Loading/ProgressBar
 		bar.value = value
+
 		if has_node("Loading/Runner"):
 			var runner = $Loading/Runner
+
 			var bar_width = bar.size.x
 			var offset_x = (bar_width * value) / 100.0
-			runner.position.x = lerp(runner.position.x, bar.position.x + offset_x, 0.2)
+			var target_x = bar.position.x + offset_x
+
+			# Nếu đã hoàn tất thì đặt thẳng vị trí
+			if value >= 100:
+				runner.position.x = target_x
+			else:
+				# Nếu đang chạy thì lerp cho mượt
+				runner.position.x = lerp(runner.position.x, target_x, 0.2)
 
 	if has_node("Loading/Label"):
+
+		var percent_text = str(int(value)) + "%"
+
 		if value < 30:
-			$Loading/Label.text = "Đang kiểm tra dữ liệu... (" + str(int(value)) + "%)"
+			$Loading/Label.text = "Đang kiểm tra dữ liệu... (" + percent_text + ")"
 		elif value < 85:
-			$Loading/Label.text = "Đang tải nội dung mới... (" + str(int(value)) + "%)"
+			$Loading/Label.text = "Đang tải nội dung mới... (" + percent_text + ")"
 		elif value < 100:
-			$Loading/Label.text = "Đang hoàn tất... (" + str(int(value)) + "%)"
+			$Loading/Label.text = "Đang hoàn tất... (" + percent_text + ")"
 		else:
 			$Loading/Label.text = "Hoàn tất!"
