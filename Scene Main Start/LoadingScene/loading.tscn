@@ -124,23 +124,23 @@ scale = Vector2(12.5323, 3.94167)
 
 [node name="Label" type="Label" parent="."]
 texture_filter = 1
-offset_left = 331.001
+offset_left = 375.0
 offset_top = 635.0
-offset_right = 770.001
+offset_right = 814.0
 offset_bottom = 690.0
 theme_override_font_sizes/font_size = 40
 text = "Downloading Update..."
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
-offset_left = 313.0
+offset_left = 322.0
 offset_top = 603.0
-offset_right = 842.0
+offset_right = 851.0
 offset_bottom = 624.0
 theme_override_styles/fill = SubResource("StyleBoxFlat_oxg48")
 show_percentage = false
 
 [node name="Runner" type="AnimatedSprite2D" parent="."]
-position = Vector2(338.5, 571.5)
+position = Vector2(345, 571)
 scale = Vector2(1.90625, 2.09375)
 sprite_frames = SubResource("SpriteFrames_piych")
 animation = &"run"
