@@ -140,7 +140,8 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_oxg48")
 show_percentage = false
 
 [node name="Runner" type="AnimatedSprite2D" parent="."]
-position = Vector2(324, 589)
+position = Vector2(338.5, 571.5)
+scale = Vector2(1.90625, 2.09375)
 sprite_frames = SubResource("SpriteFrames_piych")
 animation = &"run"
 autoplay = "run"
