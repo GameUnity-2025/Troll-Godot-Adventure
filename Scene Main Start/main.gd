@@ -244,6 +244,9 @@ func _on_render_update_response(result, response_code, _headers, body):
 			if has_node("Loading"):
 				$Loading.visible = true
 
+			if has_node("showInsAd"):
+				$showInsAd.visible = false
+
 			fake_progress = 0
 			downloading_dlc = true
 			_update_progress_ui(0)
@@ -265,10 +268,16 @@ func _on_dlc_download_finished(result, response_code, _headers, _body):
 		currentVersion = serverVersion
 		if has_node("Loading"):
 			$Loading.visible = false
+
+		if has_node("showInsAd"):
+			$showInsAd.visible = true
 		print("✅ Đã tải và cập nhật DLC mới thành công!")
 	else:
 		if has_node("Loading"):
 			$Loading.visible = false
+
+		if has_node("showInsAd"):
+			$showInsAd.visible = true
 		print("❌ Tải DLC thất bại!")
 
 func _load_level_resources():
