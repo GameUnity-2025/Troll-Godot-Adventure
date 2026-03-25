@@ -94,22 +94,45 @@ func go_to_level(level_number: int):
 		
 	current_level = level_number
 	print("GameManager: Switching to level ", level_number)
-	
-	# Đường dẫn theo cấu trúc folder của bạn
-	var level_path = "res://All_Level/Map Level " + str(level_number) + "/Level_" + str(level_number) + ".tscn"
-	
-	# Kiểm tra file có tồn tại không
-	if ResourceLoader.exists(level_path):
-		get_tree().change_scene_to_file.call_deferred(level_path)
-		print("Loading level: ", level_path)
-		# Show level title and load death message system after a short delay
+
+	var scene := _resolve_level_scene(level_number)
+	if scene != null:
+		get_tree().change_scene_to_packed.call_deferred(scene)
+		print("Loading level via PackedScene: ", level_number)
 		call_deferred("show_simple_level_title")
 		call_deferred("_ensure_death_message_system")
 		print("Level title function called")
-	else:
-		print("Level file not found: ", level_path)
-		# Fallback - thử đường dẫn khác
-		try_alternative_paths(level_number)
+		return
+
+	# Retry mounting base pack before deciding that levels are missing.
+	var remounted := FileControl._check_and_load_resource_pack()
+	if remounted:
+		scene = _resolve_level_scene(level_number)
+		if scene != null:
+			get_tree().change_scene_to_packed.call_deferred(scene)
+			print("Loading level after remount via PackedScene: ", level_number)
+			call_deferred("show_simple_level_title")
+			call_deferred("_ensure_death_message_system")
+			return
+
+	print("Level scene not found for level: ", level_number)
+	# Fallback - thử đường dẫn khác
+	try_alternative_paths(level_number)
+
+func _resolve_level_scene(level_number: int) -> PackedScene:
+	var candidates: PackedStringArray = [
+		"res://All_Level/Map Level " + str(level_number) + "/Level_" + str(level_number) + ".tscn",
+		"res://All_Level/Map Level " + str(level_number) + "/level_" + str(level_number) + ".tscn",
+		"res://All_Level/Map Level " + str(level_number) + "/map_level_" + str(level_number) + ".tscn",
+		"res://All_Level/Map Level " + str(level_number) + "/Level_2.tscn"
+	]
+
+	for path in candidates:
+		var scene = ResourceLoader.load(path)
+		if scene is PackedScene:
+			return scene
+
+	return null
 
 # Thử các đường dẫn khác nếu không tìm thấy
 func try_alternative_paths(level_number: int):
@@ -120,8 +143,9 @@ func try_alternative_paths(level_number: int):
 	]
 	
 	for path in alternative_paths:
-		if ResourceLoader.exists(path):
-			get_tree().change_scene_to_file.call_deferred(path)
+		var scene = ResourceLoader.load(path)
+		if scene is PackedScene:
+			get_tree().change_scene_to_packed.call_deferred(scene)
 			print("Found alternative path: ", path)
 			call_deferred("_ensure_death_message_system")
 			return

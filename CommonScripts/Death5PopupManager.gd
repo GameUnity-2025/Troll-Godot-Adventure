@@ -24,6 +24,10 @@ func _ready():
 	print("✅ Death5PopupManager initialized")
 	print("💀 Deaths since last popup: ", deaths_since_last_popup, "/", DEATHS_PER_POPUP)
 
+func _ensure_interstitial_node() -> void:
+	if ad.get_parent() == null:
+		add_child(ad)
+
 # === PUBLIC API ===
 func add_death() -> bool:
 	deaths_since_last_popup += 1
@@ -35,6 +39,7 @@ func add_death() -> bool:
 	print("💀 Death added: %d/%d deaths since last popup" % [deaths_since_last_popup, DEATHS_PER_POPUP])
 	
 	if deaths_since_last_popup == DEATHS_PER_POPUP-1:
+		_ensure_interstitial_node()
 		ad._on_load_pressed()
 		print("preload ads before last death")
 	
@@ -50,6 +55,7 @@ func _trigger_popup():
 	_save_data()
 	
 	print("🎮 Showing popup after 5 deaths!")
+	_ensure_interstitial_node()
 	ad._on_show_pressed()
 	print("show ad")
 	#_show_popup()

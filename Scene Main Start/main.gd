@@ -10,10 +10,10 @@ var downloading_dlc: bool = false
 var fake_speed: float = 4.0
 
 var versionFile = "user://version.json"
-var game_content_path = "user://AllLevel.pck"
+var game_content_path = ""
 
 var rewar = preload("res://CommonScripts/ads/Rewarded.gd")
-var rewarAD = rewar.new()
+var rewarAD = null
 
 const MAIN_SCENE := "res://Scene Main Start/main.tscn"
 const SPECIAL_SCENE := "res://Special Main Scene/special_main.tscn"
@@ -58,8 +58,7 @@ func _ready():
 	)
 
 	print("running patch downloader...")
-	rewarAD._on_load_pressed()
-	print("ad loaded")
+	print("iOS: rewarded ads are lazy-loaded on demand")
 
 	currentVersion = FileControl._local_version_check()
 	FileControl._check_and_load_resource_pack()
@@ -81,6 +80,14 @@ func _ready():
 		AudioController.play_special_music()
 	else:
 		AudioController.play_main_music()
+
+	# Chạy ngầm load_ads một chút sau khi vào màn chính để tránh lag khi bấm hộp quà
+	get_tree().create_timer(1.5).timeout.connect(func():
+		if rewarAD == null:
+			rewarAD = rewar.new()
+			add_child(rewarAD)
+			rewarAD._on_load_pressed()
+	)
 
 func _on_start_bt_down():
 	animate_button_down($"StartRoot/Start-BT")
@@ -244,9 +251,6 @@ func _on_render_update_response(result, response_code, _headers, body):
 			if has_node("Loading"):
 				$Loading.visible = true
 
-			if has_node("showInsAd"):
-				$showInsAd.visible = false
-
 			fake_progress = 0
 			downloading_dlc = true
 			_update_progress_ui(0)
@@ -268,16 +272,10 @@ func _on_dlc_download_finished(result, response_code, _headers, _body):
 		currentVersion = serverVersion
 		if has_node("Loading"):
 			$Loading.visible = false
-
-		if has_node("showInsAd"):
-			$showInsAd.visible = true
 		print("✅ Đã tải và cập nhật DLC mới thành công!")
 	else:
 		if has_node("Loading"):
 			$Loading.visible = false
-
-		if has_node("showInsAd"):
-			$showInsAd.visible = true
 		print("❌ Tải DLC thất bại!")
 
 func _load_level_resources():
@@ -323,6 +321,18 @@ func _on_daily_death_updated(current: int, max_deaths: int):
 	print("Daily deaths updated: %d/%d" % [current, max_deaths])
 
 func _on_show_ins_ad_pressed() -> void:
+	if rewarAD == null:
+		rewarAD = rewar.new()
+		add_child(rewarAD)
+		await get_tree().process_frame
+
+	if not rewarAD.is_loaded():
+		rewarAD.auto_show_when_loaded = true
+		if not rewarAD._is_loading:
+			rewarAD._on_load_pressed()
+		print("Rewarded ad not ready yet, loading now and will auto-show")
+		return
+
 	rewarAD._on_show_pressed()
 	DeathLimitManager.try_reduce_death()
 	print("showing ad")
