@@ -26,6 +26,7 @@ DeathCounterUI="*res://UI/DeathCounterUI.tscn"
 DeathLimitManager="*res://CommonScripts/DeathLimitManager.gd"
 Death5PopupManager="*res://CommonScripts/Death5PopupManager.gd"
 FileControl="*res://CommonScripts/FileControl/FileControl.gd"
+APIManager="*res://CommonScripts/APIManager.gd"
 
 [display]
 

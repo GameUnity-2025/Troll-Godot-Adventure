@@ -7,6 +7,10 @@ const SAVE_FILE = "user://game_progress.save"
 var max_level_unlocked: int = 10
 var current_level: int = 1
 var death_count: int = 0
+var server_data_loaded: bool = false
+var last_synced_level := -1
+var last_synced_max := -1
+
 
 signal level_unlocked(level_number: int)
 signal death_count_changed(new_count: int)
@@ -15,8 +19,16 @@ func _ready():
 	# ✅ Connect signals với AutoLoad DeathLimitManager
 	DeathLimitManager.death_limit_reached.connect(_on_death_limit_reached)
 	DeathLimitManager.death_count_updated.connect(_on_daily_death_updated)
+	DeathLimitManager.death_count_updated.connect(_sync_total_deaths)
+	APIManager.player_data_loaded.connect(_on_player_data_loaded)
+	APIManager.death_response.connect(_on_death_response)
 	
-	load_progress()
+	if APIManager.token == "":
+		# ❗ chưa login → dùng local
+		load_progress()
+	else:
+		APIManager.get_player_data()
+	
 	# Auto-load DeathMessageSystem using process method
 	set_process(true)
 
@@ -81,7 +93,12 @@ func unlock_next_level():
 	if next_level > max_level_unlocked:
 		max_level_unlocked = next_level
 		level_unlocked.emit(next_level)
+
 		save_progress()
+
+		# 🔥 SYNC SERVER
+		sync_progress_if_needed()
+
 		print("Unlocked level: ", next_level)
 
 # Chuyển đến level - SỬA ĐƯỜNG DẪN
@@ -94,6 +111,7 @@ func go_to_level(level_number: int):
 		
 	current_level = level_number
 	print("GameManager: Switching to level ", level_number)
+	sync_progress_if_needed()
 	
 	# Đường dẫn theo cấu trúc folder của bạn
 	var level_path = "res://All_Level/Map Level " + str(level_number) + "/Level_" + str(level_number) + ".tscn"
@@ -169,30 +187,22 @@ func reset_progress():
 
 # ✅ Tăng death count - CẬP NHẬT ĐỂ SỬ DỤNG DEATH LIMIT
 func increment_death_count() -> bool:
-	# Kiểm tra daily limit trước
 	if not DeathLimitManager.can_die():
-		print("❌ Cannot die - Daily death limit already reached!")
-		# Hiện thông báo và về main menu
 		_show_death_limit_block_message()
 		return false
 		
 	var can_die = DeathLimitManager.try_add_death()
 	
 	if can_die:
-		# Tăng total death count (cho statistics)
-		death_count += 1
-		death_count_changed.emit(death_count)
-		save_progress()
-		
-		# ✅ THÊM POPUP SAU 5 LẦN CHẾT
+		# 🔥 GỌI SERVER
+		APIManager.send_death()
+
+		# UI popup vẫn hiện bình thường
 		Death5PopupManager.add_death()
-		
-		print("Death count: ", death_count, " | Daily: ", DeathLimitManager.current_deaths)
+
 		return true
-	else:
-		print("❌ Daily death limit reached!")
-		# Popup sẽ tự động hiện từ DeathLimitUI
-		return false
+		
+	return false
 
 # Get death count
 func get_death_count() -> int:
@@ -367,20 +377,20 @@ func _on_daily_death_updated(current: int, max_deaths: int):
 # ✅ AUTO-LOAD DEATH LIMIT UI (NOW LOADS SCENE)
 func _auto_load_death_limit_ui():
 	var current_scene = get_tree().current_scene
-	if not current_scene:
+	if not current_scene: return
+	
+	# KHÔNG LOAD UI NẾU LÀ AUTH SCENE
+	if current_scene.scene_file_path.contains("AuthScene"):
+		print("AuthScene detected - Skipping DeathLimitUI")
 		return
-		
+
 	# Check if DeathLimitUI already exists
 	var existing_ui = current_scene.get_node_or_null("DeathLimitUI")
-	if existing_ui:
-		print("DeathLimitUI already exists in scene")
-		return
+	if existing_ui: return
 	
-	# Load and instantiate DeathLimitUI scene
 	var death_ui_scene = preload("res://UI/DeathLimitUI.tscn")
 	var death_ui_instance = death_ui_scene.instantiate()
 	current_scene.add_child(death_ui_instance)
-	print("✅ Auto-loaded DeathLimitUI scene into %s" % current_scene.name)
 
 # ✅ PUBLIC API CHO EXTERNAL ACCESS
 func get_death_limit_manager():
@@ -554,3 +564,48 @@ func go_to_actual_special_level(level_number: int):
 		call_deferred("_ensure_death_message_system")
 	else:
 		print("❌ Không tìm thấy file Special Level: ", path)
+
+
+func _sync_total_deaths(_current, _max):
+	if not server_data_loaded:
+		return
+
+	death_count = DeathLimitManager.total_deaths
+	death_count_changed.emit(death_count)
+
+
+func _on_player_data_loaded(data):
+	max_level_unlocked = data.get("max_level_unlocked", 1)
+	current_level = data.get("current_level", 1)
+	server_data_loaded = true
+
+	DeathLimitManager.total_deaths = data.get("total_deaths", 0)
+	death_count = DeathLimitManager.total_deaths
+
+	# 🔥 THÊM DÒNG NÀY
+	death_count_changed.emit(death_count)
+
+	save_progress()
+
+	print("✅ Loaded from server: Level =", current_level, "Max =", max_level_unlocked, "Deaths =", death_count)
+
+func sync_progress_if_needed():
+	if current_level == last_synced_level and max_level_unlocked == last_synced_max:
+		return
+
+	last_synced_level = current_level
+	last_synced_max = max_level_unlocked
+
+	APIManager.update_progress(current_level, max_level_unlocked)
+
+func _on_death_response(data):
+	print("🔥 Death API:", data)
+
+	var total = data.get("total_deaths", death_count)
+
+	# ✅ UPDATE TỪ SERVER
+	DeathLimitManager.total_deaths = total
+	death_count = total
+
+	death_count_changed.emit(death_count)
+	save_progress()

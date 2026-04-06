@@ -21,6 +21,18 @@ const MAIN_LEVEL_SELECT := "res://UI/level_select_menu.tscn"
 const SPECIAL_LEVEL_SELECT := "res://Special Main Scene/SpecialLevelSelect.tscn"
 
 func _ready():
+	await get_tree().process_frame
+
+	if !APIManager.is_ready:
+		await get_tree().process_frame
+
+	if APIManager.token == "":
+		print("🚫 Chưa login → chuyển AuthScene")
+		get_tree().change_scene_to_file("res://UI/AuthScene.tscn")
+		return
+
+	print("✅ Đã login → vào game")
+	
 	$"StartRoot/Start-BT".pressed.connect(
 		func(): animate_button_down($StartRoot)
 	)
@@ -230,6 +242,10 @@ func _on_render_update_response(result, response_code, _headers, body):
 		return
 
 	var json_data = JSON.parse_string(body.get_string_from_utf8())
+
+	if json_data == null:
+		print("❌ JSON parse error")
+		return
 	if json_data and json_data.has("success") and json_data.success:
 		serverVersion = float(json_data.version)
 		pending_pck_url = json_data.url
@@ -334,7 +350,6 @@ func _process(delta):
 			_update_progress_ui(fake_progress)
 
 func _update_progress_ui(value: float):
-
 	value = clamp(value, 0, 100)
 
 	if has_node("Loading/ProgressBar"):
@@ -343,20 +358,16 @@ func _update_progress_ui(value: float):
 
 		if has_node("Loading/Runner"):
 			var runner = $Loading/Runner
-
 			var bar_width = bar.size.x
 			var offset_x = (bar_width * value) / 100.0
 			var target_x = bar.position.x + offset_x
 
-			# Nếu đã hoàn tất thì đặt thẳng vị trí
 			if value >= 100:
 				runner.position.x = target_x
 			else:
-				# Nếu đang chạy thì lerp cho mượt
 				runner.position.x = lerp(runner.position.x, target_x, 0.2)
 
 	if has_node("Loading/Label"):
-
 		var percent_text = str(int(value)) + "%"
 
 		if value < 30:
@@ -367,3 +378,10 @@ func _update_progress_ui(value: float):
 			$Loading/Label.text = "Đang hoàn tất... (" + percent_text + ")"
 		else:
 			$Loading/Label.text = "Hoàn tất!"
+
+func _on_logout_bt_up():
+	$"/root/AudioController".play_click()
+
+	print("🚪 Logging out...")
+
+	APIManager.logout()

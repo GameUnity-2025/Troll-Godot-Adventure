@@ -9,6 +9,7 @@ const SAVE_FILE := "user://death_limit.dat"
 var current_deaths: int = 0
 var last_reset_date: String = ""
 var _is_limit_reached: bool = false
+var total_deaths: int = 0
 
 # Signals
 signal death_limit_reached
@@ -18,14 +19,19 @@ signal limit_reset_for_new_day
 func _ready():
 	_load_data()
 	_check_daily_reset()
-	
-	# Auto-save mỗi 60 giây để tránh mất data
+
+	# ✅ CONNECT API
+	APIManager.death_response.connect(_on_server_response)
+	APIManager.player_data_loaded.connect(sync_from_server) # 🔥 THÊM DÒNG NÀY
+
+	print("✅ DeathLimitManager ready (SERVER MODE)")
+
 	var timer = Timer.new()
 	timer.wait_time = 60.0
 	timer.timeout.connect(_auto_save)
 	timer.autostart = true
 	add_child(timer)
-	
+
 	print("✅ DeathLimitManager initialized - Deaths: %d/%d, Date: %s" % [current_deaths, MAX_DEATHS_PER_DAY, last_reset_date])
 
 # === PUBLIC API ===
@@ -37,18 +43,6 @@ func try_add_death() -> bool:
 		if not _is_limit_reached:
 			_is_limit_reached = true
 			death_limit_reached.emit()
-			print("💀 Death limit reached! (%d/%d)" % [current_deaths, MAX_DEATHS_PER_DAY])
-		return false
-	
-	current_deaths += 1
-	death_count_updated.emit(current_deaths, MAX_DEATHS_PER_DAY)
-	_save_data()
-	
-	print("💀 Death added: %d/%d remaining lives" % [get_remaining_deaths(), MAX_DEATHS_PER_DAY])
-	
-	if current_deaths >= MAX_DEATHS_PER_DAY:
-		_is_limit_reached = true
-		death_limit_reached.emit()
 		return false
 	
 	return true
@@ -109,6 +103,7 @@ func _save_data() -> void:
 	var data = {
 		"version": 1,
 		"current_deaths": current_deaths,
+		"total_deaths": total_deaths, # 🔥 thêm dòng này
 		"last_reset_date": last_reset_date,
 		"timestamp": Time.get_unix_time_from_system()
 	}
@@ -135,6 +130,7 @@ func _load_data() -> void:
 		print("⚠️ Invalid death limit save data, resetting")
 		return
 		
+	total_deaths = data.get("total_deaths", 0)
 	current_deaths = data.get("current_deaths", 0)
 	last_reset_date = data.get("last_reset_date", Time.get_date_string_from_system())
 	
@@ -164,3 +160,50 @@ func debug_set_deaths(count: int) -> void:
 	if _is_limit_reached:
 		death_limit_reached.emit()
 	print("🐛 DEBUG: Set deaths to %d/%d" % [current_deaths, MAX_DEATHS_PER_DAY])
+
+func _on_server_response(data):
+	if data == null:
+		print("❌ Data null")
+		return
+
+	print("📥 Server data:", data)
+
+	if data.get("blocked", false):
+		_is_limit_reached = true
+		death_limit_reached.emit()
+		return
+
+	# 🔥 OVERWRITE TOÀN BỘ từ server
+	current_deaths = data.get("daily_deaths", 0)
+	total_deaths = data.get("total_deaths", 0)
+
+	# reset trạng thái nếu server chưa block
+	_is_limit_reached = false
+
+	# 🔥 SAVE LẠI LOCAL (đồng bộ)
+	_save_data()
+
+	death_count_updated.emit(current_deaths, MAX_DEATHS_PER_DAY)
+
+	print("✅ Sync from server:",
+		"daily =", current_deaths,
+		"total =", total_deaths)
+
+func sync_from_server(data):
+	if data == null:
+		print("❌ sync_from_server: data null")
+		return
+
+	print("🌐 Sync FULL từ server:", data)
+
+	current_deaths = int(data.get("daily_deaths", 0))
+	total_deaths = int(data.get("total_deaths", 0))
+
+	_is_limit_reached = current_deaths >= MAX_DEATHS_PER_DAY
+
+	_save_data()
+	death_count_updated.emit(current_deaths, MAX_DEATHS_PER_DAY)
+
+	print("✅ AFTER SYNC:",
+		"daily =", current_deaths,
+		"total =", total_deaths)

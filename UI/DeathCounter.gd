@@ -3,8 +3,10 @@ extends Control
 @onready var death_count_label = $HBoxContainer/DeathCountLabel
 
 func _ready():
-	update_death_count(GameManager.get_death_count())
 	GameManager.death_count_changed.connect(_on_death_count_changed)
+
+	# fallback nếu đã có data
+	update_death_count(GameManager.get_death_count())
 
 
 func _process(_delta):

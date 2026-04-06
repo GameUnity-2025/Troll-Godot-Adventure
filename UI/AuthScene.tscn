@@ -1,0 +1,287 @@
+[gd_scene load_steps=15 format=3 uid="uid://qi86pgv37uqb"]
+
+[ext_resource type="Script" uid="uid://5gofuybcuajf" path="res://UI/auth.gd" id="1_hhb5u"]
+[ext_resource type="Texture2D" uid="uid://cbdq22f1u2rpp" path="res://Pixel Adventure 1/Free/Background/unnamed.jpg" id="2_cdd0w"]
+[ext_resource type="FontFile" uid="uid://dyubtm3itt5ee" path="res://Pixel Adventure 1/Free/fonts/LuckiestGuy-Regular.ttf" id="3_cdd0w"]
+[ext_resource type="Texture2D" uid="uid://cml4gwn5x114w" path="res://Pixel Adventure 1/Free/Background/GameTitle_Background.png" id="4_4hhmk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cdd0w"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0.694118, 0.109804, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hhmk"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0.694118, 0.109804, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utreo"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0.694118, 0.109804, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_top = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cdd0w"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qo0bb"]
+content_margin_top = 6.0
+bg_color = Color(0.813457, 0.435298, 0.085549, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mm4kr"]
+content_margin_top = 6.0
+bg_color = Color(0.707594, 0.373047, 0.0562509, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_top = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oftte"]
+content_margin_top = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.811765, 0.435294, 0.0862745, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pnvqf"]
+content_margin_top = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.705882, 0.372549, 0.054902, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+expand_margin_top = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_61vru"]
+content_margin_top = 14.0
+content_margin_bottom = 6.0
+bg_color = Color(0.811765, 0.435294, 0.0862745, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nvci"]
+content_margin_top = 10.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="AuthScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hhb5u")
+
+[node name="BackGround" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 70.0
+offset_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cdd0w")
+
+[node name="Panel" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 176.0
+offset_top = 166.0
+offset_right = -709.0
+offset_bottom = -48.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -161.5
+offset_top = -201.0
+offset_right = 146.5
+offset_bottom = 215.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.694118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 16
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 38
+text = "LOGIN"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="UsernameInput" type="LineEdit" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_cdd0w")
+placeholder_text = "Username"
+
+[node name="Spacer2" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="PasswordInput" type="LineEdit" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_4hhmk")
+placeholder_text = "Password"
+
+[node name="Spacer3" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="ConfirmPasswordInput" type="LineEdit" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_utreo")
+placeholder_text = "Confirm Password"
+
+[node name="Spacer4" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="MainButton" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cdd0w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qo0bb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mm4kr")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qo0bb")
+text = "Login"
+
+[node name="Spacer5" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="SwitchButton" type="Button" parent="Panel/VBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(310, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/hover = SubResource("StyleBoxFlat_oftte")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pnvqf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_61vru")
+text = "Don't have account? Register
+"
+autowrap_mode = 3
+
+[node name="Spacer6" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.694118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_outline_size = 8
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 26
+autowrap_mode = 2
+
+[node name="GameTitleBackground" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -779.0
+offset_top = 27.0
+offset_right = 951.0
+offset_bottom = 867.0
+grow_horizontal = 0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_4hhmk")
+
+[node name="GameTitle" type="Label" parent="GameTitleBackground"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -379.0
+offset_top = -96.0
+offset_right = 452.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0551398
+theme_override_colors/font_color = Color(1, 0.619608, 0.101961, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.694118)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 12
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 14
+theme_override_fonts/font = ExtResource("3_cdd0w")
+theme_override_font_sizes/font_size = 160
+theme_override_styles/normal = SubResource("StyleBoxFlat_7nvci")
+text = "DIE & RETRY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Panel/VBoxContainer/MainButton" to="." method="_on_main_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SwitchButton" to="." method="_on_switch_button_pressed"]
