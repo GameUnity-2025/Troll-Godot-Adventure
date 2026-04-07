@@ -1,9 +1,11 @@
-[gd_scene load_steps=15 format=3 uid="uid://qi86pgv37uqb"]
+[gd_scene load_steps=18 format=3 uid="uid://qi86pgv37uqb"]
 
 [ext_resource type="Script" uid="uid://5gofuybcuajf" path="res://UI/auth.gd" id="1_hhb5u"]
 [ext_resource type="Texture2D" uid="uid://cbdq22f1u2rpp" path="res://Pixel Adventure 1/Free/Background/unnamed.jpg" id="2_cdd0w"]
 [ext_resource type="FontFile" uid="uid://dyubtm3itt5ee" path="res://Pixel Adventure 1/Free/fonts/LuckiestGuy-Regular.ttf" id="3_cdd0w"]
 [ext_resource type="Texture2D" uid="uid://cml4gwn5x114w" path="res://Pixel Adventure 1/Free/Background/GameTitle_Background.png" id="4_4hhmk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4hhmk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cdd0w"]
 content_margin_left = 10.0
@@ -15,6 +17,8 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 expand_margin_top = 4.0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_utreo"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hhmk"]
 content_margin_left = 10.0
 content_margin_right = 10.0
@@ -24,6 +28,8 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 expand_margin_top = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_oftte"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_utreo"]
 content_margin_left = 10.0
@@ -159,6 +165,7 @@ theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.82745
 theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
 theme_override_fonts/font = ExtResource("3_cdd0w")
 theme_override_font_sizes/font_size = 22
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4hhmk")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cdd0w")
 placeholder_text = "Username"
 
@@ -173,6 +180,7 @@ theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.82745
 theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
 theme_override_fonts/font = ExtResource("3_cdd0w")
 theme_override_font_sizes/font_size = 22
+theme_override_styles/focus = SubResource("StyleBoxEmpty_utreo")
 theme_override_styles/normal = SubResource("StyleBoxFlat_4hhmk")
 placeholder_text = "Password"
 
@@ -187,6 +195,7 @@ theme_override_colors/font_placeholder_color = Color(0.827451, 0.827451, 0.82745
 theme_override_colors/font_color = Color(0.827451, 0.827451, 0.827451, 1)
 theme_override_fonts/font = ExtResource("3_cdd0w")
 theme_override_font_sizes/font_size = 22
+theme_override_styles/focus = SubResource("StyleBoxEmpty_oftte")
 theme_override_styles/normal = SubResource("StyleBoxFlat_utreo")
 placeholder_text = "Confirm Password"
 
