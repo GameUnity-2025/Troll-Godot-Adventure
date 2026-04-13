@@ -82,7 +82,7 @@ func _ready():
 	add_child(http_request)
 	http_request.request_completed.connect(self._on_render_update_response)
 
-	var server_url = "https://game-update-server-q7tg.onrender.com/api/levels/latest"
+	var server_url = "https://game-update-server-18ni.onrender.com/api/levels/latest"
 	var error = http_request.request(server_url)
 
 	if error != OK:
